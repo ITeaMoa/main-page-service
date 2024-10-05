@@ -20,11 +20,7 @@ public class FeedCoreRepository implements FeedRepository {
 
     @Override
     public void save(FeedDto feedDto){
-        table.putItem(new FeedEntity(
-                feedDto.getPk(),
-                feedDto.getSk(),
-                feedDto.getTitle()
-        ));
+        table.putItem(new FeedEntity(feedDto));
     }
 
     @Override
