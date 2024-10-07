@@ -16,8 +16,8 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "{\"userId\"=\"" + userId + '\"' +
-                ", \"comment\"=\"" + comment + '\"' +
-                ", \"commentTime\"=\"" + commentTime + "\"}";
+        return "{userId:" + userId +
+                ", comment:" + comment +
+                ", commentTime:" + commentTime + "}";
     }
 }

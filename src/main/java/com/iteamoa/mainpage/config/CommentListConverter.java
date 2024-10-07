@@ -15,36 +15,35 @@ import java.util.stream.Collectors;
 
 public class CommentListConverter implements AttributeConverter<List<Comment>> {
 
-    @Override
     public AttributeValue transformFrom(List<Comment> input) {
-        List<String> serializedComments = input.stream()
-                .map(Comment::toString) // Comment 객체를 문자열로 직렬화하는 방법 구현
-                .toList();
+        List<AttributeValue> serializedComments = input.stream()
+                .map(comment -> AttributeValue.builder()
+                        .m(Map.of(
+                                "userId", AttributeValue.builder().s(comment.getUserId()).build(),
+                                "comment", AttributeValue.builder().s(comment.getComment()).build(),
+                                "commentTime", AttributeValue.builder().s(comment.getCommentTime().toString()).build()
+                        ))
+                        .build())
+                .collect(Collectors.toList());
+
         return AttributeValue.builder()
-                .l(serializedComments.stream()
-                        .map(comment -> AttributeValue.builder().s(comment).build()) // 문자열을 AttributeValue로 변환
-                        .collect(Collectors.toList()))
+                .l(serializedComments)
                 .build();
     }
 
     @Override
     public List<Comment> transformTo(AttributeValue input) {
-        for(AttributeValue attribute : input.l()) {
-            System.out.println(attribute.s());
-        }
-
         return input.l().stream()
                 .map(attr -> {
                     Map<String, AttributeValue> attributes = attr.m();
                     return new Comment(
                             Optional.ofNullable(attributes.get("userId")).map(AttributeValue::s).orElse(""),
                             Optional.ofNullable(attributes.get("comment")).map(AttributeValue::s).orElse(""),
-                            LocalDateTime.parse(Optional.ofNullable(attributes.get("commentTime")).map(AttributeValue::s).orElse("1970-01-01T00:00"))
+                            LocalDateTime.parse(Optional.ofNullable(attributes.get("commentTime")).map(AttributeValue::s).orElse(""))
                     );
                 })
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public EnhancedType<List<Comment>> type() {
