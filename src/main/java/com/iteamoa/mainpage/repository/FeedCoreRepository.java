@@ -14,8 +14,6 @@ import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Repository
 public class FeedCoreRepository implements FeedRepository {
@@ -49,20 +47,47 @@ public class FeedCoreRepository implements FeedRepository {
     }
 
     @Override
-    public List<FeedEntity> queryMostLikedFeed(){
-
-        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("T"));
+    public List<FeedEntity> queryMostLikedFeed() {
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#STUDY"));
         final DynamoDbIndex<FeedEntity> mostLikedFeedIndex = table.index("MostLikedFeedIndex");
 
         final SdkIterable<Page<FeedEntity>> pagedResult = mostLikedFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
-                .limit(3)
-                .attributesToProject("Pk", "Sk", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount"));
+                .attributesToProject("Pk", "Sk", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus"));
+
         List<FeedEntity> top3MostLikedFeed = new ArrayList<>();
-        pagedResult.forEach(page -> top3MostLikedFeed.addAll(page.items()));
+        pagedResult.forEach(page -> {
+            for (FeedEntity feed : page.items()) {
+                if (feed.getPostStatus())
+                    top3MostLikedFeed.add(feed);
+
+                if (top3MostLikedFeed.size() == 3)
+                    return;
+            }
+        });
 
         return top3MostLikedFeed;
     }
 
+
+    @Override
+    public List<FeedEntity> queryPostedFeed(){
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#STUDY"));
+        final DynamoDbIndex<FeedEntity> postedFeedIndex = table.index("PostedFeedIndex");
+        final SdkIterable<Page<FeedEntity>> pagedResult = postedFeedIndex.query(q->q
+                .queryConditional(queryConditional)
+                .scanIndexForward(false)
+                .attributesToProject("Pk", "Sk", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus", "timestamp"));
+
+        List<FeedEntity> postedFeeds = new ArrayList<>();
+        pagedResult.forEach(page -> {
+            for (FeedEntity feed : page.items()) {
+                if (feed.getPostStatus())
+                    postedFeeds.add(feed);
+            }
+        });
+
+        return postedFeeds;
+    }
 }

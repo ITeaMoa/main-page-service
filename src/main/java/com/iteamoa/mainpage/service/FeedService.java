@@ -46,4 +46,14 @@ public class FeedService {
         }
         return feedDTOs;
     }
+
+    public List<FeedDto> postedFeed() {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
+        List<FeedDto> feedDTOs = new ArrayList<>();
+        for (FeedEntity feedEntity : feedEntities) {
+            FeedDto feedDto = FeedDto.toFeedDto(feedEntity);
+            feedDTOs.add(feedDto);
+        }
+        return feedDTOs;
+    }
 }

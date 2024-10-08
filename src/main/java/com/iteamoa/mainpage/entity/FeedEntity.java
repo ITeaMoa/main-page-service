@@ -25,7 +25,7 @@ public class FeedEntity extends BaseEntity{
     private int likesCount;
     private String content;
     private List<Comment> comments;
-    private String postStatus;
+    private boolean postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
 
@@ -46,7 +46,7 @@ public class FeedEntity extends BaseEntity{
         this.likesCount = feedDto.getLikesCount();
         this.content = feedDto.getContent();
         this.comments = feedDto.getComments();
-        this.postStatus = feedDto.getPostStatus();
+        this.postStatus = feedDto.isPostStatus();
         this.timestamp = feedDto.getTimestamp();
         this.savedFeed = feedDto.isSavedFeed();
     }
@@ -107,8 +107,7 @@ public class FeedEntity extends BaseEntity{
     public List<Comment> getComments(){ return comments;}
 
     @DynamoDbAttribute("postStatus")
-    @DynamoDbSecondaryPartitionKey(indexNames = "MostLikedFeedIndex")
-    public String getPostStatus(){
+    public boolean getPostStatus(){
         return postStatus;
     }
 

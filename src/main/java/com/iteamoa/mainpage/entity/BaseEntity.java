@@ -27,6 +27,7 @@ public abstract class BaseEntity {
 
     @DynamoDbSortKey
     @DynamoDbAttribute("Sk")
+    @DynamoDbSecondaryPartitionKey(indexNames = {"MostLikedFeedIndex", "PostedFeedIndex"})
     public String getSk() {
         return sk;
     }

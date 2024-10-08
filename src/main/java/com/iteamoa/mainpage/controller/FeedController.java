@@ -51,4 +51,9 @@ public class FeedController {
         return feedService.mostLikedFeed();
     }
 
+    @GetMapping("/test5")
+    public List<FeedDto> test5() {
+        return feedService.postedFeed();
+    }
+
 }
