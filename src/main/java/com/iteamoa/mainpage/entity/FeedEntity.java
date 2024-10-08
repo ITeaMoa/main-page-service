@@ -6,9 +6,7 @@ import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.utils.Comment;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.Setter;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbConvertedBy;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +25,7 @@ public class FeedEntity extends BaseEntity{
     private int likesCount;
     private String content;
     private List<Comment> comments;
-    private boolean postStatus;
+    private String postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
 
@@ -48,7 +46,7 @@ public class FeedEntity extends BaseEntity{
         this.likesCount = feedDto.getLikesCount();
         this.content = feedDto.getContent();
         this.comments = feedDto.getComments();
-        this.postStatus = feedDto.isPostStatus();
+        this.postStatus = feedDto.getPostStatus();
         this.timestamp = feedDto.getTimestamp();
         this.savedFeed = feedDto.isSavedFeed();
     }
@@ -94,6 +92,7 @@ public class FeedEntity extends BaseEntity{
     }
 
     @DynamoDbAttribute("likesCount")
+    @DynamoDbSecondarySortKey(indexNames = "MostLikedFeedIndex")
     public int getLikesCount(){
         return likesCount;
     }
@@ -108,7 +107,8 @@ public class FeedEntity extends BaseEntity{
     public List<Comment> getComments(){ return comments;}
 
     @DynamoDbAttribute("postStatus")
-    public boolean getPostStatus(){
+    @DynamoDbSecondaryPartitionKey(indexNames = "MostLikedFeedIndex")
+    public String getPostStatus(){
         return postStatus;
     }
 

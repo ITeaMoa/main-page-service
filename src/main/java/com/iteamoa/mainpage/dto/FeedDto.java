@@ -28,7 +28,7 @@ public class FeedDto {
     private int likesCount;
     private String content;
     private List<Comment> comments;
-    private boolean postStatus;
+    private String postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
 

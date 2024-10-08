@@ -6,6 +6,8 @@ import com.iteamoa.mainpage.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -33,5 +35,15 @@ public class FeedService {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
         feedRepository.delete(feedDto.getPk(), feedDto.getSk());
+    }
+
+    public List<FeedDto> mostLikedFeed() {
+        List<FeedEntity> feedEntities = feedRepository.queryMostLikedFeed();
+        List<FeedDto> feedDTOs = new ArrayList<>();
+        for (FeedEntity feedEntity : feedEntities) {
+            FeedDto feedDto = FeedDto.toFeedDto(feedEntity);
+            feedDTOs.add(feedDto);
+        }
+        return feedDTOs;
     }
 }

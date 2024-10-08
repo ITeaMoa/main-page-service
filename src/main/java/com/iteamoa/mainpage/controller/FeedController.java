@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class FeedController {
@@ -44,5 +46,9 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/test4")
+    public List<FeedDto> test4() {
+        return feedService.mostLikedFeed();
+    }
 
 }

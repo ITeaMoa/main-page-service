@@ -4,6 +4,7 @@ package com.iteamoa.mainpage.entity;
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 @Setter
@@ -19,6 +20,7 @@ public abstract class BaseEntity {
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("Pk")
+    @DynamoDbSecondaryPartitionKey(indexNames = "LikesCountIndex")
     public String getPk() {
         return pk;
     }
