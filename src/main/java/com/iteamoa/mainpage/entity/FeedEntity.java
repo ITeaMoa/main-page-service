@@ -17,7 +17,7 @@ public class FeedEntity extends BaseEntity{
     private String entityType;
     private String creatorId;
     private String title;
-    private String recruitmentNum;
+    private int recruitmentNum;
     private LocalDateTime deadline;
     private String place;
     private int period;
@@ -67,7 +67,7 @@ public class FeedEntity extends BaseEntity{
     }
 
     @DynamoDbAttribute("recruitmentNum")
-    public String getRecruitmentNum(){
+    public int getRecruitmentNum(){
         return recruitmentNum;
     }
 
