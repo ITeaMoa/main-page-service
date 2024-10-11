@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/main")
 @RequiredArgsConstructor
 public class FeedController {
 
     private final FeedService feedService;
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test(@RequestBody FeedDto feedDto) {
+    @GetMapping("/test1")
+    public ResponseEntity<?> getFeed(@RequestBody FeedDto feedDto) {
         FeedDto result = feedService.searchFeed(feedDto);
 
         if (result == null) {
@@ -27,7 +28,7 @@ public class FeedController {
     }
 
     @PostMapping("/test2")
-    public ResponseEntity<?> test2(@RequestBody FeedDto feedDto) {
+    public ResponseEntity<?> saveFeed(@RequestBody FeedDto feedDto) {
         try{
             feedService.saveFeed(feedDto);
         } catch (IllegalArgumentException e){
@@ -37,7 +38,7 @@ public class FeedController {
     }
 
     @DeleteMapping("/test3")
-    public ResponseEntity<?> test3(@RequestBody FeedDto feedDto) {
+    public ResponseEntity<?> deleteFeed(@RequestBody FeedDto feedDto) {
         try{
             feedService.deleteFeed(feedDto);
         } catch (IllegalArgumentException e){
@@ -46,24 +47,24 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/test4")
-    public List<FeedDto> test4() {
-        return feedService.mostLikedFeed();
+    @GetMapping("/liked")
+    public ResponseEntity<?> mostLikedFeedTask() {
+        return ResponseEntity.ok(feedService.mostLikedFeed());
     }
 
-    @GetMapping("/test5")
-    public List<FeedDto> test5() {
-        return feedService.postedFeed();
+    @GetMapping()
+    public ResponseEntity<?> postedFeedTask() {
+        return ResponseEntity.ok(feedService.postedFeed());
     }
 
-    @GetMapping("/test6")
-    public List<FeedDto> searchTagTask(@RequestBody FeedDto feedDto) {
-        return feedService.searchTag(feedDto);
+    @GetMapping("/search-tag")
+    public ResponseEntity<?> searchTagTask(@RequestBody FeedDto feedDto) {
+        return ResponseEntity.ok(feedService.searchTag(feedDto));
     }
 
-    @GetMapping("/test7")
-    public List<FeedDto> keywordSearchTask(@RequestParam String keyword) {
-        return feedService.keywordSearch(keyword);
+    @GetMapping("/search-keyword")
+    public ResponseEntity<?> keywordSearchTask(@RequestParam String keyword) {
+        return ResponseEntity.ok(feedService.keywordSearch(keyword));
     }
 
 }
