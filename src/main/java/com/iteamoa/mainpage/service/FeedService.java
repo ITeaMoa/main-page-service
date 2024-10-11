@@ -1,6 +1,7 @@
 package com.iteamoa.mainpage.service;
 
 import com.iteamoa.mainpage.dto.FeedDto;
+import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,41 +38,39 @@ public class FeedService {
         feedRepository.delete(feedDto.getPk(), feedDto.getSk());
     }
 
-    public List<FeedDto> mostLikedFeed() {
-        List<FeedEntity> feedEntities = feedRepository.queryMostLikedFeed();
+    public List<FeedDto> mostLikedFeed(QueryDto query) {
+        List<FeedEntity> feedEntities = feedRepository.queryMostLikedFeed(query.getFeedType());
         List<FeedDto> feedDTOs = new ArrayList<>();
+
+        for (FeedEntity feedEntity : feedEntities)
+            feedDTOs.add(FeedDto.toFeedDto(feedEntity));
+
+        return feedDTOs;
+    }
+
+    public List<FeedDto> postedFeed(QueryDto query) {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed(query.getFeedType());
+        List<FeedDto> feedDTOs = new ArrayList<>();
+
         for (FeedEntity feedEntity : feedEntities) {
-            FeedDto feedDto = FeedDto.toFeedDto(feedEntity);
-            feedDTOs.add(feedDto);
+            feedDTOs.add(FeedDto.toFeedDto(feedEntity));
         }
         return feedDTOs;
     }
 
-    public List<FeedDto> postedFeed() {
-        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
+    public List<FeedDto> searchTag(QueryDto query) {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed(query.getFeedType());
         List<FeedDto> feedDTOs = new ArrayList<>();
-        for (FeedEntity feedEntity : feedEntities) {
-            FeedDto feedDto = FeedDto.toFeedDto(feedEntity);
-            feedDTOs.add(feedDto);
-        }
-        return feedDTOs;
-    }
-
-    public List<FeedDto> searchTag(FeedDto feedDto) {
-        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
-        List<FeedDto> feedDTOs = new ArrayList<>();
-        System.out.println(feedDto.getTags());
         for (FeedEntity feedEntity : feedEntities) {
             boolean exist = true;
             List<String> feedTags = feedEntity.getTags();
 
-            for(String tag : feedDto.getTags()) {
+            for(String tag : query.getTags()) {
                 if (!feedTags.contains(tag)){
                     exist = false;
                     break;
                 }
             }
-
             if (exist) {
                 feedDTOs.add(FeedDto.toFeedDto(feedEntity));
             }
@@ -80,13 +79,13 @@ public class FeedService {
         return feedDTOs;
     }
 
-    public List<FeedDto> keywordSearch(String keyword) {
-        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
+    public List<FeedDto> keywordSearch(QueryDto query) {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed(query.getFeedType());
         List<FeedDto> feedDTOs = new ArrayList<>();
 
         for (FeedEntity feedEntity : feedEntities) {
             String feedTitle = feedEntity.getTitle().toLowerCase();
-            if (feedTitle.contains(keyword.toLowerCase()))
+            if (feedTitle.contains(query.getKeyword().toLowerCase()))
                 feedDTOs.add(FeedDto.toFeedDto(feedEntity));
         }
 

@@ -12,6 +12,6 @@ public interface FeedRepository{
     void save(FeedDto feedDto);
     FeedEntity fine(String pk, String sk);
     void delete(String pk, String sk);
-    List<FeedEntity> queryMostLikedFeed();
-    List<FeedEntity> queryPostedFeed();
+    List<FeedEntity> queryMostLikedFeed(String feedType);
+    List<FeedEntity> queryPostedFeed(String feedType);
 }

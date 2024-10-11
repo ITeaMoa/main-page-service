@@ -6,7 +6,6 @@ import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.core.pagination.sync.SdkIterable;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.model.Page;
@@ -45,8 +44,10 @@ public class FeedCoreRepository implements FeedRepository {
     }
 
     @Override
-    public List<FeedEntity> queryMostLikedFeed() {
-        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#STUDY"));
+    public List<FeedEntity> queryMostLikedFeed(String feedType) {
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue(
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
+        ));
         final DynamoDbIndex<FeedEntity> mostLikedFeedIndex = table.index("MostLikedFeedIndex");
 
         final SdkIterable<Page<FeedEntity>> pagedResult = mostLikedFeedIndex.query(q -> q
@@ -69,8 +70,10 @@ public class FeedCoreRepository implements FeedRepository {
     }
     
     @Override
-    public List<FeedEntity> queryPostedFeed(){
-        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#PROJECT"));
+    public List<FeedEntity> queryPostedFeed(String feedType){
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue(
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
+        ));
         final DynamoDbIndex<FeedEntity> postedFeedIndex = table.index("PostedFeedIndex");
         final SdkIterable<Page<FeedEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)

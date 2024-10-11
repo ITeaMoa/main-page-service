@@ -1,6 +1,7 @@
 package com.iteamoa.mainpage.controller;
 
 import com.iteamoa.mainpage.dto.FeedDto;
+import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,23 +49,23 @@ public class FeedController {
     }
 
     @GetMapping("/liked")
-    public ResponseEntity<?> mostLikedFeedTask() {
-        return ResponseEntity.ok(feedService.mostLikedFeed());
+    public ResponseEntity<?> mostLikedFeedTask(@RequestBody QueryDto query) {
+        return ResponseEntity.ok(feedService.mostLikedFeed(query));
     }
 
     @GetMapping()
-    public ResponseEntity<?> postedFeedTask() {
-        return ResponseEntity.ok(feedService.postedFeed());
+    public ResponseEntity<?> postedFeedTask(@RequestBody QueryDto query) {
+        return ResponseEntity.ok(feedService.postedFeed(query));
     }
 
     @GetMapping("/search-tag")
-    public ResponseEntity<?> searchTagTask(@RequestBody FeedDto feedDto) {
-        return ResponseEntity.ok(feedService.searchTag(feedDto));
+    public ResponseEntity<?> tagSearchTask(@RequestBody QueryDto query) {
+        return ResponseEntity.ok(feedService.searchTag(query));
     }
 
     @GetMapping("/search-keyword")
-    public ResponseEntity<?> keywordSearchTask(@RequestParam String keyword) {
-        return ResponseEntity.ok(feedService.keywordSearch(keyword));
+    public ResponseEntity<?> keywordSearchTask(@RequestBody QueryDto query) {
+        return ResponseEntity.ok(feedService.keywordSearch(query));
     }
 
 }
