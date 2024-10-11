@@ -58,7 +58,7 @@ public class FeedController {
         return ResponseEntity.ok(feedService.postedFeed(query));
     }
 
-    @GetMapping("/search-tag")
+    @GetMapping("/search-tags")
     public ResponseEntity<?> tagSearchTask(@RequestBody QueryDto query) {
         return ResponseEntity.ok(feedService.searchTag(query));
     }
