@@ -79,4 +79,17 @@ public class FeedService {
 
         return feedDTOs;
     }
+
+    public List<FeedDto> keywordSearch(String keyword) {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
+        List<FeedDto> feedDTOs = new ArrayList<>();
+
+        for (FeedEntity feedEntity : feedEntities) {
+            String feedTitle = feedEntity.getTitle().toLowerCase();
+            if (feedTitle.contains(keyword.toLowerCase()))
+                feedDTOs.add(FeedDto.toFeedDto(feedEntity));
+        }
+
+        return feedDTOs;
+    }
 }

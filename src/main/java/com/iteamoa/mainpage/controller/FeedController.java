@@ -61,4 +61,9 @@ public class FeedController {
         return feedService.searchTag(feedDto);
     }
 
+    @GetMapping("/test7")
+    public List<FeedDto> keywordSearchTask(@RequestParam String keyword) {
+        return feedService.keywordSearch(keyword);
+    }
+
 }
