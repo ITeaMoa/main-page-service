@@ -56,4 +56,9 @@ public class FeedController {
         return feedService.postedFeed();
     }
 
+    @GetMapping("/test6")
+    public List<FeedDto> searchTagTask(@RequestBody FeedDto feedDto) {
+        return feedService.searchTag(feedDto);
+    }
+
 }

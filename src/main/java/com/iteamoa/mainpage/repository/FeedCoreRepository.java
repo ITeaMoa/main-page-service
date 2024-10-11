@@ -18,11 +18,9 @@ import java.util.List;
 @Repository
 public class FeedCoreRepository implements FeedRepository {
     private final DynamoDbTable<FeedEntity> table;
-    private final DynamoDbEnhancedClient enhancedClient;
 
-    public FeedCoreRepository(DynamoDbTable<FeedEntity> table, DynamoDbEnhancedClient enhancedClient) {
+    public FeedCoreRepository(DynamoDbTable<FeedEntity> table) {
         this.table = table;
-        this.enhancedClient = enhancedClient;
     }
 
     @Override
@@ -69,11 +67,10 @@ public class FeedCoreRepository implements FeedRepository {
 
         return top3MostLikedFeed;
     }
-
-
+    
     @Override
     public List<FeedEntity> queryPostedFeed(){
-        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#STUDY"));
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue("FEEDTYPE#PROJECT"));
         final DynamoDbIndex<FeedEntity> postedFeedIndex = table.index("PostedFeedIndex");
         final SdkIterable<Page<FeedEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)

@@ -56,4 +56,27 @@ public class FeedService {
         }
         return feedDTOs;
     }
+
+    public List<FeedDto> searchTag(FeedDto feedDto) {
+        List<FeedEntity> feedEntities = feedRepository.queryPostedFeed();
+        List<FeedDto> feedDTOs = new ArrayList<>();
+        System.out.println(feedDto.getTags());
+        for (FeedEntity feedEntity : feedEntities) {
+            boolean exist = true;
+            List<String> feedTags = feedEntity.getTags();
+
+            for(String tag : feedDto.getTags()) {
+                if (!feedTags.contains(tag)){
+                    exist = false;
+                    break;
+                }
+            }
+
+            if (exist) {
+                feedDTOs.add(FeedDto.toFeedDto(feedEntity));
+            }
+        }
+
+        return feedDTOs;
+    }
 }
