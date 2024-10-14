@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class FeedService {
+public class MainService {
     private final FeedRepository feedRepository;
 
     public FeedDto searchFeed(FeedDto feedDto) throws NoSuchElementException{
