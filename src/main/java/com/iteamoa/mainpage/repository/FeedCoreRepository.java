@@ -2,7 +2,9 @@ package com.iteamoa.mainpage.repository;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import com.iteamoa.mainpage.dto.FeedDto;
+import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.entity.FeedEntity;
+import com.iteamoa.mainpage.entity.LikeEntity;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.core.pagination.sync.SdkIterable;
