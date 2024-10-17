@@ -36,8 +36,16 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $IMAGE_REPO_NAME:$IMAGE_TAG
+
       # Setup kubectl with our EKS Cluster
+      - echo "Setting up kubectl for EKS Cluster iteamoa..."
       - aws eks update-kubeconfig --name iteamoa --region ap-northeast-2
-      - echo Push the latest image to cluster
-      # Apply changes to our Application using kubectl
-      - kubectl apply -f deployment.yml
+
+      # Deploy the latest image to the EKS cluster using Kubernetes manifests
+      - echo "Applying deployment and service files to the cluster..."
+      - kubectl apply -f infra/k8s/main-service-deployment.yaml
+      - kubectl apply -f infra/k8s/main-service.yaml
+
+      # Optionally, confirm that the deployment was successful
+      - echo "Deployment applied. Verifying pods..."
+      - kubectl get pods
