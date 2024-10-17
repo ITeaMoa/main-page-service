@@ -3,11 +3,13 @@ package com.iteamoa.mainpage.entity;
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.utils.KeyConverter;
+import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
 import java.time.LocalDateTime;
 
+@Setter
 @DynamoDbBean
 public class LikeEntity extends BaseEntity {
     private String entityType;

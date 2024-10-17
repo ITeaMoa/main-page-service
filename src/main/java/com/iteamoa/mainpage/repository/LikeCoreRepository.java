@@ -1,6 +1,8 @@
 package com.iteamoa.mainpage.repository;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
+import com.iteamoa.mainpage.dto.LikeDto;
+import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.entity.LikeEntity;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import software.amazon.awssdk.core.pagination.sync.SdkIterable;
@@ -13,6 +15,10 @@ import java.util.List;
 
 public class LikeCoreRepository implements LikeRepository {
     private final DynamoDbTable<LikeEntity> table;
+
+    public void save(LikeDto likeDto){
+        table.putItem(new LikeEntity(likeDto));
+    }
 
     public LikeCoreRepository(DynamoDbTable<LikeEntity> table) {
         this.table = table;

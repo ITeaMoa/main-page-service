@@ -11,6 +11,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
 @DynamoDbBean
 public class FeedEntity extends BaseEntity{
     private String entityType;
