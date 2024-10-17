@@ -1,0 +1,43 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Ensure AWS CLI is installed
+      - aws --version
+      # Install app dependencies
+      - echo "Installing app dependencies..."
+      - curl -LO https://dl.k8s.io/release/v1.27.2/bin/linux/amd64/kubectl   
+      - chmod +x ./kubectl
+      - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+      - echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+      - source ~/.bashrc
+      - echo 'Check kubectl version'
+      - kubectl version --short --client
+    
+  pre_build:
+    commands:
+      # Login to ECR Registry for docker to push the image to ECR Repository
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com
+
+  build:
+    commands:
+      # Build Docker Image
+      - IMAGE_REPO_NAME=$AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa
+      - IMAGE_TAG=latest
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      
+  post_build:
+    commands:
+      # Push Docker Image to ECR Repository
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_REPO_NAME:$IMAGE_TAG
+      # Setup kubectl with our EKS Cluster
+      - aws eks update-kubeconfig --name iteamoa --region ap-northeast-2
+      - echo Push the latest image to cluster
+      # Apply changes to our Application using kubectl
+      - kubectl apply -f deployment.yml
