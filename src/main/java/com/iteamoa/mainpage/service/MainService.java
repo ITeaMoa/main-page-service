@@ -5,7 +5,6 @@ import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.repository.FeedRepository;
-import com.iteamoa.mainpage.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MainService {
     private final FeedRepository feedRepository;
-    private final LikeRepository likeRepository;
 
     public FeedDto searchFeed(FeedDto feedDto) throws NoSuchElementException{
         FeedEntity feedEntity = feedRepository.fine(feedDto.getPk(), feedDto.getSk());
@@ -94,7 +92,4 @@ public class MainService {
         return feedDTOs;
     }
 
-    public void saveLike(LikeDto likeDto) {
-        likeRepository.save(likeDto);
-    }
 }

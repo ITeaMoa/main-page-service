@@ -45,9 +45,4 @@ public class DynamoDbConfig {
         return client.table(table, TableSchema.fromBean(FeedEntity.class));
     }
 
-    @Bean
-    public DynamoDbTable<LikeEntity> LikeTable(DynamoDbEnhancedClient client){
-        return client.table(table, TableSchema.fromBean(LikeEntity.class));
-    }
-
 }
