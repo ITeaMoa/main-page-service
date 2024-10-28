@@ -3,6 +3,7 @@ package com.iteamoa.mainpage.entity;
 import com.iteamoa.mainpage.config.CommentListConverter;
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import com.iteamoa.mainpage.dto.FeedDto;
+import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.utils.Comment;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Setter
 @DynamoDbBean
-public class FeedEntity extends BaseEntity{
+public class ItemEntity extends BaseEntity{
     private String entityType;
     private String creatorId;
     private String title;
@@ -26,17 +27,26 @@ public class FeedEntity extends BaseEntity{
     private String content;
     private List<Comment> comments;
     private boolean postStatus;
-    private LocalDateTime timestamp;
     private boolean savedFeed;
 
-    public FeedEntity() { }
-    public FeedEntity(FeedDto feedDto) {
+    public ItemEntity() { }
+    public ItemEntity(LikeDto likeDto) {
+        super(
+                KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
+                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk()),
+                likeDto.getTimestamp()
+        );
+        this.entityType = likeDto.getEntityType();
+    }
+
+    public ItemEntity(FeedDto feedDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, feedDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk())
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk()),
+                feedDto.getTimestamp()
         );
         this.entityType = feedDto.getEntityType();
-        this.creatorId = feedDto.getCreatorId();
+        this.creatorId = KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId());
         this.title = feedDto.getTitle();
         this.recruitmentNum = feedDto.getRecruitmentNum();
         this.deadline = feedDto.getDeadline();
@@ -47,11 +57,11 @@ public class FeedEntity extends BaseEntity{
         this.content = feedDto.getContent();
         this.comments = feedDto.getComments();
         this.postStatus = feedDto.isPostStatus();
-        this.timestamp = feedDto.getTimestamp();
         this.savedFeed = feedDto.isSavedFeed();
     }
 
     @DynamoDbAttribute("entityType")
+    @DynamoDbSecondarySortKey(indexNames = "LikeFeedIndex")
     public String getEntityType(){
         return entityType;
     }
@@ -111,16 +121,9 @@ public class FeedEntity extends BaseEntity{
         return postStatus;
     }
 
-    @DynamoDbAttribute("timestamp")
-    public LocalDateTime getTimestamp(){
-        return timestamp;
-    }
-
     @DynamoDbAttribute("savedFeed")
     public boolean getSavedFeed(){
         return savedFeed;
     }
-
-
 }
 

@@ -1,7 +1,6 @@
 package com.iteamoa.mainpage.config;
 
-import com.iteamoa.mainpage.entity.FeedEntity;
-import com.iteamoa.mainpage.entity.LikeEntity;
+import com.iteamoa.mainpage.entity.ItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -41,8 +40,8 @@ public class DynamoDbConfig {
     }
 
     @Bean
-    public DynamoDbTable<FeedEntity> FeedTable(DynamoDbEnhancedClient client){
-        return client.table(table, TableSchema.fromBean(FeedEntity.class));
+    public DynamoDbTable<ItemEntity> FeedTable(DynamoDbEnhancedClient client){
+        return client.table(table, TableSchema.fromBean(ItemEntity.class));
     }
 
 }

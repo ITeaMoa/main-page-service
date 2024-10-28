@@ -7,20 +7,25 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbParti
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Setter
 public abstract class BaseEntity {
     private String pk;
     private String sk;
+    private LocalDateTime timestamp;
 
     public BaseEntity() { }
-    public BaseEntity(String pk, String sk) {
+    public BaseEntity(String pk, String sk, LocalDateTime timestamp) {
         this.pk = pk;
         this.sk = sk;
+        this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);
     }
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("Pk")
-    @DynamoDbSecondaryPartitionKey(indexNames = "LikesCountIndex")
+    @DynamoDbSecondaryPartitionKey(indexNames = {"LikesCountIndex", "LikeFeedIndex"})
     public String getPk() {
         return pk;
     }
@@ -32,4 +37,8 @@ public abstract class BaseEntity {
         return sk;
     }
 
+    @DynamoDbAttribute("timestamp")
+    public LocalDateTime getTimestamp(){
+        return timestamp;
+    }
 }

@@ -1,7 +1,8 @@
 package com.iteamoa.mainpage.dto;
 
-import com.iteamoa.mainpage.entity.FeedEntity;
+import com.iteamoa.mainpage.entity.ItemEntity;
 import com.iteamoa.mainpage.utils.Comment;
+import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedDto {
-    private String pk;
+    private Long pk;
     private String sk;
     private String entityType;
-    private String creatorId;
+    private Long creatorId;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -32,24 +33,24 @@ public class FeedDto {
     private LocalDateTime timestamp;
     private boolean savedFeed;
 
-    public static FeedDto toFeedDto(FeedEntity feedEntity){
+    public static FeedDto toFeedDto(ItemEntity itemEntity){
         return new FeedDto(
-                feedEntity.getPk(),
-                feedEntity.getSk(),
-                feedEntity.getEntityType(),
-                feedEntity.getCreatorId(),
-                feedEntity.getTitle(),
-                feedEntity.getRecruitmentNum(),
-                feedEntity.getDeadline(),
-                feedEntity.getPlace(),
-                feedEntity.getPeriod(),
-                feedEntity.getTags(),
-                feedEntity.getLikesCount(),
-                feedEntity.getContent(),
-                feedEntity.getComments(),
-                feedEntity.getPostStatus(),
-                feedEntity.getTimestamp(),
-                feedEntity.getSavedFeed()
+                KeyConverter.toLongId(itemEntity.getPk()),
+                KeyConverter.toStringType(itemEntity.getSk()),
+                itemEntity.getEntityType(),
+                KeyConverter.toLongId(itemEntity.getCreatorId()),
+                itemEntity.getTitle(),
+                itemEntity.getRecruitmentNum(),
+                itemEntity.getDeadline(),
+                itemEntity.getPlace(),
+                itemEntity.getPeriod(),
+                itemEntity.getTags(),
+                itemEntity.getLikesCount(),
+                itemEntity.getContent(),
+                itemEntity.getComments(),
+                itemEntity.getPostStatus(),
+                itemEntity.getTimestamp(),
+                itemEntity.getSavedFeed()
         );
     }
 
