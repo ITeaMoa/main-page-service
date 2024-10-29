@@ -49,7 +49,7 @@ public class ItemCoreRepository implements ItemRepository {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue(
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
         ));
-        final DynamoDbIndex<ItemEntity> mostLikedFeedIndex = table.index("MostLikedFeed-Index");
+        final DynamoDbIndex<ItemEntity> mostLikedFeedIndex = table.index("MostLikedFeed-index");
 
         final SdkIterable<Page<ItemEntity>> pagedResult = mostLikedFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
@@ -75,7 +75,7 @@ public class ItemCoreRepository implements ItemRepository {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue(
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
         ));
-        final DynamoDbIndex<ItemEntity> postedFeedIndex = table.index("PostedFeed-Index");
+        final DynamoDbIndex<ItemEntity> postedFeedIndex = table.index("PostedFeed-index");
         final SdkIterable<Page<ItemEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
@@ -110,7 +110,7 @@ public class ItemCoreRepository implements ItemRepository {
                 .partitionValue(KeyConverter.toPk(DynamoDbEntityType.USER, pk))  // PK 조건 설정
                 .sortValue("Like")
         );
-        final DynamoDbIndex<ItemEntity> likeFeedIndex = table.index("Like-Index");
+        final DynamoDbIndex<ItemEntity> likeFeedIndex = table.index("Like-index");
         final SdkIterable<Page<ItemEntity>> pagedResult = likeFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)

@@ -61,7 +61,7 @@ public class ItemEntity extends BaseEntity{
     }
 
     @DynamoDbAttribute("entityType")
-    @DynamoDbSecondarySortKey(indexNames = "LikeFeedIndex")
+    @DynamoDbSecondarySortKey(indexNames = "Like-index")
     public String getEntityType(){
         return entityType;
     }
@@ -102,7 +102,7 @@ public class ItemEntity extends BaseEntity{
     }
 
     @DynamoDbAttribute("likesCount")
-    @DynamoDbSecondarySortKey(indexNames = "MostLikedFeedIndex")
+    @DynamoDbSecondarySortKey(indexNames = "MostLikedFeed-Index")
     public int getLikesCount(){
         return likesCount;
     }
