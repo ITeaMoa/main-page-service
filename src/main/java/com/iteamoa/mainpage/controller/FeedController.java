@@ -1,5 +1,6 @@
 package com.iteamoa.mainpage.controller;
 
+import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
@@ -88,8 +89,29 @@ public class FeedController {
     }
 
     @GetMapping("/like")
-    public ResponseEntity<?> likeFeedTask(@RequestParam("userId") Long userId){
+    public ResponseEntity<?> likeFeedTask(@RequestParam("userId") String userId){
         return ResponseEntity.ok(mainService.likeFeed(userId));
+    }
+
+    @PostMapping("/application")
+    public ResponseEntity<?> applicationFeed(@RequestBody ApplicationDto applicationDto) {
+        try{
+            mainService.saveApplication(applicationDto);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/application")
+    public ResponseEntity<?> deleteApplicationTask(@RequestBody ApplicationDto applicationDto) {
+        try{
+            mainService.deleteApplication(applicationDto);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

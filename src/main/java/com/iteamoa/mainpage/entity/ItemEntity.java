@@ -2,6 +2,8 @@ package com.iteamoa.mainpage.entity;
 
 import com.iteamoa.mainpage.config.CommentListConverter;
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
+import com.iteamoa.mainpage.constant.StatusType;
+import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.utils.Comment;
@@ -15,7 +17,8 @@ import java.util.List;
 @Setter
 @DynamoDbBean
 public class ItemEntity extends BaseEntity{
-    private String entityType;
+    private DynamoDbEntityType entityType;
+
     private String creatorId;
     private String title;
     private int recruitmentNum;
@@ -29,23 +32,24 @@ public class ItemEntity extends BaseEntity{
     private boolean postStatus;
     private boolean savedFeed;
 
-    public ItemEntity() { }
+    private String part;
+    private StatusType status;
+
+    public ItemEntity() {}
     public ItemEntity(LikeDto likeDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk()),
-                likeDto.getTimestamp()
+                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk())
         );
-        this.entityType = likeDto.getEntityType();
+        this.entityType = DynamoDbEntityType.LIKE;
     }
 
     public ItemEntity(FeedDto feedDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, feedDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk()),
-                feedDto.getTimestamp()
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk())
         );
-        this.entityType = feedDto.getEntityType();
+        this.entityType = DynamoDbEntityType.FEED;
         this.creatorId = KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId());
         this.title = feedDto.getTitle();
         this.recruitmentNum = feedDto.getRecruitmentNum();
@@ -60,9 +64,19 @@ public class ItemEntity extends BaseEntity{
         this.savedFeed = feedDto.isSavedFeed();
     }
 
+    public ItemEntity(ApplicationDto applicationDto) {
+        super(
+            KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
+            KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk())
+        );
+        this.entityType = DynamoDbEntityType.APPLICATION;
+        this.part = applicationDto.getPart();
+        this.status = StatusType.PENDING;
+    }
+
     @DynamoDbAttribute("entityType")
     @DynamoDbSecondarySortKey(indexNames = "Like-index")
-    public String getEntityType(){
+    public DynamoDbEntityType getEntityType(){
         return entityType;
     }
 
@@ -125,5 +139,16 @@ public class ItemEntity extends BaseEntity{
     public boolean getSavedFeed(){
         return savedFeed;
     }
+
+    @DynamoDbAttribute("part")
+    public String getPart(){
+        return part;
+    }
+
+    @DynamoDbAttribute("status")
+    public StatusType getStatus(){
+        return status;
+    }
+
 }
 

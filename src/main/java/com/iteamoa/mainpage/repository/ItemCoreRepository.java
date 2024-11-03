@@ -1,6 +1,7 @@
 package com.iteamoa.mainpage.repository;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
+import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.entity.ItemEntity;
@@ -29,7 +30,7 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public ItemEntity searchFeed(Long pk, String sk) {
+    public ItemEntity searchFeed(String pk, String sk) {
         return table.getItem(KeyConverter.toKey(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
@@ -37,7 +38,7 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public void deleteFeed(Long pk, String sk) {
+    public void deleteFeed(String pk, String sk) {
         table.deleteItem(KeyConverter.toKey(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
@@ -105,7 +106,7 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public List<ItemEntity> queryLikeFeed(Long pk){
+    public List<ItemEntity> queryLikeFeed(String pk){
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k
                 .partitionValue(KeyConverter.toPk(DynamoDbEntityType.USER, pk))  // PK 조건 설정
                 .sortValue("Like")
@@ -119,5 +120,18 @@ public class ItemCoreRepository implements ItemRepository {
         List<ItemEntity> likedFeeds = new ArrayList<>();
         pagedResult.forEach(page -> likedFeeds.addAll(page.items()));
         return likedFeeds;
+    }
+
+    @Override
+    public void saveApplication(ApplicationDto applicationDto){
+        table.putItem(new ItemEntity(applicationDto));
+    }
+
+    @Override
+    public void deleteApplication(ApplicationDto applicationDto) {
+        table.deleteItem(KeyConverter.toKey(
+                KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
+                KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk())
+        ));
     }
 }

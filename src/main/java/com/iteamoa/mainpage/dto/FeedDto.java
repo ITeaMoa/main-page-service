@@ -16,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedDto {
-    private Long pk;
+    private String pk;
     private String sk;
     private String entityType;
-    private Long creatorId;
+    private String creatorId;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -35,10 +35,10 @@ public class FeedDto {
 
     public static FeedDto toFeedDto(ItemEntity itemEntity){
         return new FeedDto(
-                KeyConverter.toLongId(itemEntity.getPk()),
-                KeyConverter.toStringType(itemEntity.getSk()),
-                itemEntity.getEntityType(),
-                KeyConverter.toLongId(itemEntity.getCreatorId()),
+                KeyConverter.toStringId(itemEntity.getPk()),
+                KeyConverter.toStringId(itemEntity.getSk()),
+                itemEntity.getEntityType().getType(),
+                KeyConverter.toStringId(itemEntity.getCreatorId()),
                 itemEntity.getTitle(),
                 itemEntity.getRecruitmentNum(),
                 itemEntity.getDeadline(),

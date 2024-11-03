@@ -1,5 +1,6 @@
 package com.iteamoa.mainpage.service;
 
+import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
@@ -26,14 +27,14 @@ public class MainService {
     }
 
     public void saveFeed(FeedDto feedDto) throws IllegalArgumentException{
-        if (feedDto.getPk() == 0 || feedDto.getSk() == null) {
+        if (feedDto.getPk() == null || feedDto.getSk() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
         itemRepository.saveFeed(feedDto);
     }
 
     public void deleteFeed(FeedDto feedDto) throws IllegalArgumentException{
-        if (feedDto.getPk() == 0 || feedDto.getSk() == null) {
+        if (feedDto.getPk() == null || feedDto.getSk() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
         itemRepository.deleteFeed(feedDto.getPk(), feedDto.getSk());
@@ -93,13 +94,13 @@ public class MainService {
     }
 
     public void saveLike(LikeDto likeDto) throws IllegalArgumentException{
-        if (likeDto.getPk() == 0 || likeDto.getSk() == 0) {
+        if (likeDto.getPk() == null || likeDto.getSk() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
         itemRepository.saveLikeFeed(likeDto);
     }
 
-    public List<LikeDto> likeFeed(Long userId) {
+    public List<LikeDto> likeFeed(String userId) {
         List<ItemEntity> itemEntities = itemRepository.queryLikeFeed(userId);
         List<LikeDto> likeDTOs = new ArrayList<>();
         for (ItemEntity itemEntity : itemEntities)
@@ -109,9 +110,23 @@ public class MainService {
     }
 
     public void deleteLike(LikeDto likeDto) {
-        if (likeDto.getPk() == 0 || likeDto.getSk() == 0) {
+        if (likeDto.getPk() == null || likeDto.getSk() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
         itemRepository.deleteLikeFeed(likeDto);
+    }
+
+    public void saveApplication(ApplicationDto applicationDto) throws IllegalArgumentException {
+        if (applicationDto.getPk() == null || applicationDto.getSk() == null || applicationDto.getPart() == null) {
+            throw new IllegalArgumentException("Pk or SK cannot be null");
+        }
+        itemRepository.saveApplication(applicationDto);
+    }
+
+    public void deleteApplication(ApplicationDto applicationDto) throws IllegalArgumentException {
+        if (applicationDto.getPk() == null || applicationDto.getSk() == null) {
+            throw new IllegalArgumentException("Pk or SK cannot be null");
+        }
+        itemRepository.deleteApplication(applicationDto);
     }
 }
