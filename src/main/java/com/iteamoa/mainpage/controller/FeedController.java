@@ -1,6 +1,7 @@
 package com.iteamoa.mainpage.controller;
 
 import com.iteamoa.mainpage.dto.FeedDto;
+import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.service.MainService;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,31 @@ public class FeedController {
     @GetMapping("/search-keyword")
     public ResponseEntity<?> keywordSearchTask(@RequestBody QueryDto query) {
         return ResponseEntity.ok(mainService.keywordSearch(query));
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<?> likeTask(@RequestBody LikeDto likeDto) {
+        try{
+            mainService.saveLike(likeDto);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<?> deleteLikeTask(@RequestBody LikeDto likeDto) {
+        try{
+            mainService.deleteLike(likeDto);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<?> likeFeedTask(@RequestParam("userId") Long userId){
+        return ResponseEntity.ok(mainService.likeFeed(userId));
     }
 
 }

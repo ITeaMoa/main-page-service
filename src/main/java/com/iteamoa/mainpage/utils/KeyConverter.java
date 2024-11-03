@@ -14,6 +14,8 @@ public class KeyConverter {
         return type.getPrefix() + delimiter + id;
     }
 
+    public static String toStringType(String key) {return key.split(delimiter)[1];}
+
     public static Long toLongId(String key){
         return Long.parseLong(key.split(delimiter)[1]);
     }
