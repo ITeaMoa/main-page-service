@@ -17,6 +17,7 @@ public class LikeDto {
     private String pk;
     private String sk;
     private String entityType;
+    private String feedType;
     private LocalDateTime timestamp;
 
     public static LikeDto toLikeDto(ItemEntity itemEntity) {
@@ -24,6 +25,7 @@ public class LikeDto {
                 KeyConverter.toStringId(itemEntity.getPk()),
                 KeyConverter.toStringId(itemEntity.getSk()),
                 itemEntity.getEntityType().getType(),
+                itemEntity.getFeedType(),
                 itemEntity.getTimestamp()
         );
     }

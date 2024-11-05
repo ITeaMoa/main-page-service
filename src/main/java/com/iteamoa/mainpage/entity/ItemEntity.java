@@ -35,15 +35,9 @@ public class ItemEntity extends BaseEntity{
     private String part;
     private StatusType status;
 
-    public ItemEntity() {}
-    public ItemEntity(LikeDto likeDto) {
-        super(
-                KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk())
-        );
-        this.entityType = DynamoDbEntityType.LIKE;
-    }
+    private String feedType;
 
+    public ItemEntity() {}
     public ItemEntity(FeedDto feedDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, feedDto.getPk()),
@@ -64,6 +58,15 @@ public class ItemEntity extends BaseEntity{
         this.savedFeed = feedDto.isSavedFeed();
     }
 
+    public ItemEntity(LikeDto likeDto) {
+        super(
+                KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
+                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk())
+        );
+        this.entityType = DynamoDbEntityType.LIKE;
+        this.feedType = likeDto.getFeedType();
+    }
+
     public ItemEntity(ApplicationDto applicationDto) {
         super(
             KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
@@ -72,6 +75,7 @@ public class ItemEntity extends BaseEntity{
         this.entityType = DynamoDbEntityType.APPLICATION;
         this.part = applicationDto.getPart();
         this.status = StatusType.PENDING;
+        this.feedType = applicationDto.getFeedType();
     }
 
     @DynamoDbAttribute("entityType")
@@ -148,6 +152,11 @@ public class ItemEntity extends BaseEntity{
     @DynamoDbAttribute("status")
     public StatusType getStatus(){
         return status;
+    }
+
+    @DynamoDbAttribute("feedType")
+    public String getFeedType(){
+        return feedType;
     }
 
 }

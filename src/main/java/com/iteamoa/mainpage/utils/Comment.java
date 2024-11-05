@@ -13,11 +13,4 @@ public class Comment {
     private String userId;
     private String comment;
     private LocalDateTime commentTime;
-
-    @Override
-    public String toString() {
-        return "{userId:" + userId +
-                ", comment:" + comment +
-                ", commentTime:" + commentTime + "}";
-    }
 }

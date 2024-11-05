@@ -19,7 +19,7 @@ public class MainService {
     private final ItemRepository itemRepository;
 
     public FeedDto searchFeed(FeedDto feedDto) throws NoSuchElementException{
-        ItemEntity itemEntity = itemRepository.searchFeed(feedDto.getPk(), feedDto.getSk());
+        ItemEntity itemEntity = itemRepository.getFeed(feedDto.getPk(), feedDto.getSk());
         if (itemEntity == null) {
             return null;
         }
@@ -95,13 +95,6 @@ public class MainService {
         return feedDTOs;
     }
 
-    public void saveLike(LikeDto likeDto) throws IllegalArgumentException{
-        if (likeDto.getPk() == null || likeDto.getSk() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
-        }
-        itemRepository.saveLikeFeed(likeDto);
-    }
-
     public List<LikeDto> likeFeed(String userId) {
         List<ItemEntity> itemEntities = itemRepository.queryLikeFeed(userId);
         List<LikeDto> likeDTOs = new ArrayList<>();
@@ -111,24 +104,58 @@ public class MainService {
         return likeDTOs;
     }
 
-    public void deleteLike(LikeDto likeDto) {
-        if (likeDto.getPk() == null || likeDto.getSk() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
+    public void saveLike(LikeDto likeDto) throws Exception{
+        if (likeDto.getPk() == null || likeDto.getSk() == null || likeDto.getFeedType() == null) {
+            throw new Exception("Pk or SK cannot be null");
         }
+        ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
+        if(feed == null)
+            throw new Exception("No feed exits");
+        feed.setLikesCount(feed.getLikesCount()+1);
+        itemRepository.updateFeed(FeedDto.toFeedDto(feed));
+
+        itemRepository.saveLikeFeed(likeDto);
+    }
+
+    public void deleteLike(LikeDto likeDto) throws Exception{
+        if (likeDto.getPk() == null || likeDto.getSk() == null || likeDto.getFeedType() == null) {
+            throw new Exception("Pk or SK cannot be null");
+        }
+
+        ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
+        if(feed == null)
+            throw new Exception("No feed exits");
+        feed.setLikesCount(feed.getLikesCount()-1);
+        itemRepository.updateFeed(FeedDto.toFeedDto(feed));
+
         itemRepository.deleteLikeFeed(likeDto);
     }
 
-    public void saveApplication(ApplicationDto applicationDto, String feedType) throws IllegalArgumentException {
+    public void saveApplication(ApplicationDto applicationDto) throws Exception {
         if (applicationDto.getPk() == null || applicationDto.getSk() == null || applicationDto.getPart() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
+            throw new Exception("Pk or SK cannot be null");
         }
-        itemRepository.saveApplication(applicationDto, feedType);
+
+        ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
+        if(feed == null)
+            throw new Exception("No feed exits");
+        feed.setLikesCount(feed.getLikesCount()+1);
+        itemRepository.updateFeed(FeedDto.toFeedDto(feed));
+
+        itemRepository.saveApplication(applicationDto);
     }
 
-    public void deleteApplication(ApplicationDto applicationDto) throws IllegalArgumentException {
+    public void deleteApplication(ApplicationDto applicationDto) throws Exception {
         if (applicationDto.getPk() == null || applicationDto.getSk() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
+
+        ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
+        if(feed == null)
+            throw new Exception("No feed exits");
+        feed.setLikesCount(feed.getLikesCount()-1);
+        itemRepository.updateFeed(FeedDto.toFeedDto(feed));
+
         itemRepository.deleteApplication(applicationDto);
     }
 }

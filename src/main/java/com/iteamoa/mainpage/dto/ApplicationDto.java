@@ -20,6 +20,7 @@ public class ApplicationDto {
     private String entityType;
     private String part;
     private StatusType status;
+    private String feedType;
     private LocalDateTime timestamp;
 
     public static ApplicationDto toApplicationDto(ItemEntity itemEntity) {
@@ -29,6 +30,7 @@ public class ApplicationDto {
                 itemEntity.getEntityType().getType(),
                 itemEntity.getPart(),
                 itemEntity.getStatus(),
+                itemEntity.getFeedType(),
                 itemEntity.getTimestamp()
         );
     }

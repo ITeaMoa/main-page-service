@@ -11,8 +11,9 @@ import java.util.List;
 @Repository
 public interface ItemRepository {
     void saveFeed(FeedDto feedDto);
-    ItemEntity searchFeed(String pk, String sk);
+    ItemEntity getFeed(String pk, String sk);
     void deleteFeed(String pk, String sk);
+    void updateFeed(FeedDto feedDto);
 
     List<ItemEntity> queryMostLikedFeed(String feedType);
     List<ItemEntity> queryPostedFeed(String feedType);
@@ -22,6 +23,6 @@ public interface ItemRepository {
 
     List<ItemEntity> queryLikeFeed(String pk);
 
-    void saveApplication(ApplicationDto applicationDto, String feedType);
+    void saveApplication(ApplicationDto applicationDto);
     void deleteApplication(ApplicationDto applicationDto);
 }

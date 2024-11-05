@@ -65,7 +65,6 @@ public class FeedController {
         QueryDto query = new QueryDto();
         query.setFeedType(feedType);
         query.setTags(tags);
-        System.out.println(tags);
 
         return ResponseEntity.ok(mainService.searchTag(query));
     }
@@ -83,7 +82,7 @@ public class FeedController {
     public ResponseEntity<?> likeTask(@RequestBody LikeDto likeDto) {
         try{
             mainService.saveLike(likeDto);
-        } catch (IllegalArgumentException e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -93,7 +92,7 @@ public class FeedController {
     public ResponseEntity<?> deleteLikeTask(@RequestBody LikeDto likeDto) {
         try{
             mainService.deleteLike(likeDto);
-        } catch (IllegalArgumentException e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -105,10 +104,10 @@ public class FeedController {
     }
 
     @PostMapping("/application")
-    public ResponseEntity<?> applicationFeed(@RequestParam String feedType, @RequestBody ApplicationDto applicationDto) {
+    public ResponseEntity<?> applicationFeed(@RequestBody ApplicationDto applicationDto) {
         try{
-            mainService.saveApplication(applicationDto, feedType);
-        } catch (IllegalArgumentException e){
+            mainService.saveApplication(applicationDto);
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -119,7 +118,7 @@ public class FeedController {
     public ResponseEntity<?> deleteApplicationTask(@RequestBody ApplicationDto applicationDto) {
         try{
             mainService.deleteApplication(applicationDto);
-        } catch (IllegalArgumentException e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

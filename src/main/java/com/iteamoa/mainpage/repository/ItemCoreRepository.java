@@ -30,7 +30,7 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public ItemEntity searchFeed(String pk, String sk) {
+    public ItemEntity getFeed(String pk, String sk) {
         return table.getItem(KeyConverter.toKey(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
@@ -43,6 +43,11 @@ public class ItemCoreRepository implements ItemRepository {
                 KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
         ));
+    }
+
+    @Override
+    public void updateFeed(FeedDto feedDto) {
+        table.updateItem(new ItemEntity(feedDto));
     }
 
     @Override
@@ -123,11 +128,7 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public void saveApplication(ApplicationDto applicationDto, String feedType){
-        ItemEntity feed = table.getItem(KeyConverter.toKey(
-                KeyConverter.toPk(DynamoDbEntityType.FEED, applicationDto.getSk()),
-                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
-        ));
+    public void saveApplication(ApplicationDto applicationDto){
         table.putItem(new ItemEntity(applicationDto));
     }
 
