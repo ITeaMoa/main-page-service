@@ -21,7 +21,7 @@ public class CommentListConverter implements AttributeConverter<List<Comment>> {
                         .m(Map.of(
                                 "userId", AttributeValue.builder().s(comment.getUserId()).build(),
                                 "comment", AttributeValue.builder().s(comment.getComment()).build(),
-                                "commentTime", AttributeValue.builder().s(comment.getCommentTime().toString()).build()
+                                "timestamp", AttributeValue.builder().s(comment.getTimestamp().toString()).build()
                         ))
                         .build())
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class CommentListConverter implements AttributeConverter<List<Comment>> {
                     return new Comment(
                             Optional.ofNullable(attributes.get("userId")).map(AttributeValue::s).orElse(""),
                             Optional.ofNullable(attributes.get("comment")).map(AttributeValue::s).orElse(""),
-                            LocalDateTime.parse(Optional.ofNullable(attributes.get("commentTime")).map(AttributeValue::s).orElse(""))
+                            LocalDateTime.parse(Optional.ofNullable(attributes.get("timestamp")).map(AttributeValue::s).orElse(""))
                     );
                 })
                 .collect(Collectors.toList());

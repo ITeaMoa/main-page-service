@@ -13,6 +13,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Setter
 @DynamoDbBean
@@ -31,6 +32,8 @@ public class ItemEntity extends BaseEntity{
     private List<Comment> comments;
     private boolean postStatus;
     private boolean savedFeed;
+    private Map<String, Integer> applyRoles;
+    private Map<String, Integer> recruitmentRoles;
 
     private String part;
     private StatusType status;
@@ -56,6 +59,8 @@ public class ItemEntity extends BaseEntity{
         this.comments = feedDto.getComments();
         this.postStatus = feedDto.isPostStatus();
         this.savedFeed = feedDto.isSavedFeed();
+        this.applyRoles = feedDto.getApplyRoles();
+        this.recruitmentRoles = feedDto.getRecruitmentRoles();
     }
 
     public ItemEntity(LikeDto likeDto) {
@@ -157,6 +162,16 @@ public class ItemEntity extends BaseEntity{
     @DynamoDbAttribute("feedType")
     public String getFeedType(){
         return feedType;
+    }
+
+    @DynamoDbAttribute("applyRoles")
+    public Map<String, Integer> getApplyRoles(){
+        return applyRoles;
+    }
+
+    @DynamoDbAttribute("recruitmentRoles")
+    public Map<String, Integer> getRecruitmentRoles(){
+        return recruitmentRoles;
     }
 
 }

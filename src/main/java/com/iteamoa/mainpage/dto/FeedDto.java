@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -32,6 +33,8 @@ public class FeedDto {
     private boolean postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
+    private Map<String, Integer> applyRoles;
+    private Map<String, Integer> recruitmentRoles;
 
     public static FeedDto toFeedDto(ItemEntity itemEntity){
         return new FeedDto(
@@ -50,7 +53,10 @@ public class FeedDto {
                 itemEntity.getComments(),
                 itemEntity.getPostStatus(),
                 itemEntity.getTimestamp(),
-                itemEntity.getSavedFeed()
+                itemEntity.getSavedFeed(),
+                itemEntity.getApplyRoles(),
+                itemEntity.getRecruitmentRoles()
+
         );
     }
 

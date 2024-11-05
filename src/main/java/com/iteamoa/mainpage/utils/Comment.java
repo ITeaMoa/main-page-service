@@ -12,5 +12,5 @@ import java.time.LocalDateTime;
 public class Comment {
     private String userId;
     private String comment;
-    private LocalDateTime commentTime;
+    private LocalDateTime timestamp;
 }
