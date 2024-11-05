@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/main")
 @RequiredArgsConstructor
@@ -49,22 +51,31 @@ public class FeedController {
     }
 
     @GetMapping("/liked")
-    public ResponseEntity<?> mostLikedFeedTask(@RequestBody QueryDto query) {
-        return ResponseEntity.ok(mainService.mostLikedFeed(query));
+    public ResponseEntity<?> mostLikedFeedTask(@RequestParam String feedType) {
+        return ResponseEntity.ok(mainService.mostLikedFeed(feedType));
     }
 
     @GetMapping()
-    public ResponseEntity<?> postedFeedTask(@RequestBody QueryDto query) {
-        return ResponseEntity.ok(mainService.postedFeed(query));
+    public ResponseEntity<?> postedFeedTask(@RequestParam String feedType) {
+        return ResponseEntity.ok(mainService.postedFeed(feedType));
     }
 
     @GetMapping("/search-tags")
-    public ResponseEntity<?> tagSearchTask(@RequestBody QueryDto query) {
+    public ResponseEntity<?> tagSearchTask(@RequestParam String feedType, @RequestParam List<String> tags) {
+        QueryDto query = new QueryDto();
+        query.setFeedType(feedType);
+        query.setTags(tags);
+        System.out.println(tags);
+
         return ResponseEntity.ok(mainService.searchTag(query));
     }
 
     @GetMapping("/search-keyword")
-    public ResponseEntity<?> keywordSearchTask(@RequestBody QueryDto query) {
+    public ResponseEntity<?> keywordSearchTask(@RequestParam String feedType, @RequestParam String keyword) {
+        QueryDto query = new QueryDto();
+        query.setFeedType(feedType);
+        query.setKeyword(keyword);
+
         return ResponseEntity.ok(mainService.keywordSearch(query));
     }
 
@@ -94,9 +105,9 @@ public class FeedController {
     }
 
     @PostMapping("/application")
-    public ResponseEntity<?> applicationFeed(@RequestBody ApplicationDto applicationDto) {
+    public ResponseEntity<?> applicationFeed(@RequestParam String feedType, @RequestBody ApplicationDto applicationDto) {
         try{
-            mainService.saveApplication(applicationDto);
+            mainService.saveApplication(applicationDto, feedType);
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

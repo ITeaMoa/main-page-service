@@ -22,6 +22,6 @@ public interface ItemRepository {
 
     List<ItemEntity> queryLikeFeed(String pk);
 
-    void saveApplication(ApplicationDto applicationDto);
+    void saveApplication(ApplicationDto applicationDto, String feedType);
     void deleteApplication(ApplicationDto applicationDto);
 }

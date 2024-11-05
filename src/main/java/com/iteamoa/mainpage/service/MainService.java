@@ -40,22 +40,24 @@ public class MainService {
         itemRepository.deleteFeed(feedDto.getPk(), feedDto.getSk());
     }
 
-    public List<FeedDto> mostLikedFeed(QueryDto query) {
-        List<ItemEntity> itemEntities = itemRepository.queryMostLikedFeed(query.getFeedType());
-        List<FeedDto> feedDTOs = new ArrayList<>();
+    public List<FeedDto> mostLikedFeed(String feedType) {
+        List<ItemEntity> itemEntities = itemRepository.queryMostLikedFeed(feedType);
 
+        List<FeedDto> feedDTOs = new ArrayList<>();
         for (ItemEntity itemEntity : itemEntities)
             feedDTOs.add(FeedDto.toFeedDto(itemEntity));
 
         return feedDTOs;
     }
 
-    public List<FeedDto> postedFeed(QueryDto query) {
-        List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(query.getFeedType());
+    public List<FeedDto> postedFeed(String feedType) {
+        List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(feedType);
+
         List<FeedDto> feedDTOs = new ArrayList<>();
         for (ItemEntity itemEntity : itemEntities) {
             feedDTOs.add(FeedDto.toFeedDto(itemEntity));
         }
+
         return feedDTOs;
     }
 
@@ -116,11 +118,11 @@ public class MainService {
         itemRepository.deleteLikeFeed(likeDto);
     }
 
-    public void saveApplication(ApplicationDto applicationDto) throws IllegalArgumentException {
+    public void saveApplication(ApplicationDto applicationDto, String feedType) throws IllegalArgumentException {
         if (applicationDto.getPk() == null || applicationDto.getSk() == null || applicationDto.getPart() == null) {
             throw new IllegalArgumentException("Pk or SK cannot be null");
         }
-        itemRepository.saveApplication(applicationDto);
+        itemRepository.saveApplication(applicationDto, feedType);
     }
 
     public void deleteApplication(ApplicationDto applicationDto) throws IllegalArgumentException {

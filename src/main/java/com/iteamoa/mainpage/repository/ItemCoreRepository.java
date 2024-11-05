@@ -55,7 +55,7 @@ public class ItemCoreRepository implements ItemRepository {
         final SdkIterable<Page<ItemEntity>> pagedResult = mostLikedFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
-                .attributesToProject("Pk", "Sk", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus"));
+                .attributesToProject("Pk", "Sk", "entityType", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus"));
 
         List<ItemEntity> top3MostLikedFeed = new ArrayList<>();
         pagedResult.forEach(page -> {
@@ -80,7 +80,7 @@ public class ItemCoreRepository implements ItemRepository {
         final SdkIterable<Page<ItemEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
-                .attributesToProject("Pk", "Sk", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus", "timestamp"));
+                .attributesToProject("Pk", "Sk", "entityType", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus", "timestamp"));
         List<ItemEntity> postedFeeds = new ArrayList<>();
         pagedResult.forEach(page -> {
             for (ItemEntity feed : page.items()) {
@@ -123,7 +123,11 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public void saveApplication(ApplicationDto applicationDto){
+    public void saveApplication(ApplicationDto applicationDto, String feedType){
+        ItemEntity feed = table.getItem(KeyConverter.toKey(
+                KeyConverter.toPk(DynamoDbEntityType.FEED, applicationDto.getSk()),
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
+        ));
         table.putItem(new ItemEntity(applicationDto));
     }
 
