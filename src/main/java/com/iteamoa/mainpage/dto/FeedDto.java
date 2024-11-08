@@ -33,7 +33,7 @@ public class FeedDto {
     private boolean postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
-    private Map<String, Integer> applyRoles;
+    private Map<String, Integer> Roles;
     private Map<String, Integer> recruitmentRoles;
 
     public static FeedDto toFeedDto(ItemEntity itemEntity){
@@ -54,7 +54,7 @@ public class FeedDto {
                 itemEntity.getPostStatus(),
                 itemEntity.getTimestamp(),
                 itemEntity.getSavedFeed(),
-                itemEntity.getApplyRoles(),
+                itemEntity.getRoles(),
                 itemEntity.getRecruitmentRoles()
 
         );
