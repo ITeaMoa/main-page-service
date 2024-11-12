@@ -16,7 +16,8 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build
 
 # Expose the port that Spring Boot uses (default is 8080)
-EXPOSE 8080 # will change after eks cluster added
+# will change after eks cluster added
+EXPOSE 8080 
 
 # Copy the generated JAR file into the container
 COPY build/libs/mainpage-0.0.1-SNAPSHOT.jar /app/mainpage-0.0.1-SNAPSHOT.jar

@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+  variables:
+    IMAGE_REPO_NAME: "$AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage"
+    IMAGE_TAG: "latest"
+
 phases:
   install:
     commands:
@@ -24,7 +29,7 @@ phases:
   build:
     commands:
       # Build Docker Image
-      - IMAGE_REPO_NAME=$AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa
+      - IMAGE_REPO_NAME=$AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage
       - IMAGE_TAG=latest
       - echo Build started on `date`
       - echo Building the Docker image...          

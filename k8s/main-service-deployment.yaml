@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mainpage-service-deployment
+  namespace: iteamoa-mainpage-namespace
+  labels:
+    node: fargate
+spec:
+  replicas: 1  # Two pods running the service
+  selector:
+    matchLabels:
+      node: fargate
+  template:
+    metadata:
+      labels:
+        node: fargate
+    spec:
+      containers:
+      - name: mainpage-service
+        image: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
+        ports:
+        - containerPort: 8080  # Check container's exposed port 
+      tolerations:
+      - key: "fargate.amazonaws.com"
+        operator: "Exists"
+        effect: "NoSchedule"
