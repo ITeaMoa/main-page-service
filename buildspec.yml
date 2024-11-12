@@ -23,9 +23,19 @@ phases:
 
   build:
     commands:
-      # Build Docker Image
+      # Set up image repository details
       - IMAGE_REPO_NAME=$AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage
       - IMAGE_TAG=latest
+
+      # Build the JAR file
+      - echo "Building the JAR file with Gradle..."
+      - ./gradlew build -x test  # Skip tests if not needed
+
+      # Verify the JAR file is created
+      - echo "Verifying the JAR file exists..."
+      - ls build/libs
+      
+      # Build Docker Image
       - echo Build started on `date`
       - echo Building the Docker image...          
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
