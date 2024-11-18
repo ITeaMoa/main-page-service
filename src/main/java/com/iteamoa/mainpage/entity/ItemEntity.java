@@ -32,7 +32,7 @@ public class ItemEntity extends BaseEntity{
     private List<Comment> comments;
     private boolean postStatus;
     private boolean savedFeed;
-    private Map<String, Integer> Roles;
+    private Map<String, Integer> roles;
     private Map<String, Integer> recruitmentRoles;
     private String part;
     private StatusType status;
@@ -57,7 +57,7 @@ public class ItemEntity extends BaseEntity{
         this.comments = feedDto.getComments();
         this.postStatus = feedDto.isPostStatus();
         this.savedFeed = feedDto.isSavedFeed();
-        this.Roles = feedDto.getRoles();
+        this.roles = feedDto.getRoles();
         this.recruitmentRoles = feedDto.getRecruitmentRoles();
     }
 
@@ -162,9 +162,9 @@ public class ItemEntity extends BaseEntity{
         return feedType;
     }
 
-    @DynamoDbAttribute("applyRoles")
+    @DynamoDbAttribute("roles")
     public Map<String, Integer> getRoles(){
-        return Roles;
+        return roles;
     }
 
     @DynamoDbAttribute("recruitmentRoles")

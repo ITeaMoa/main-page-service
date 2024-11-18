@@ -33,7 +33,7 @@ public class FeedDto {
     private boolean postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
-    private Map<String, Integer> Roles;
+    private Map<String, Integer> roles;
     private Map<String, Integer> recruitmentRoles;
 
     public static FeedDto toFeedDto(ItemEntity itemEntity){
