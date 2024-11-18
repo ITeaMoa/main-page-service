@@ -1,5 +1,6 @@
 # Use an official OpenJDK runtime (Java 17) as the base image for running the Spring Boot app
-FROM openjdk:17-jdk-slim
+# FROM openjdk:17-jdk-slim - 429 Too Many Requests error 때문에 pull resource ecr로 바뀜
+FROM public.ecr.aws/docker/library/openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
