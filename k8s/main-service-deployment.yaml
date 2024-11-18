@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mainpage-service-deployment
-  namespace: iteamoa-mainpage-namespace
+  namespace: mainpage-namespace  # Match the Fargate namespace
   labels:
     node: fargate
 spec:
@@ -20,7 +20,3 @@ spec:
         image: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
         ports:
         - containerPort: 8080  # Check container's exposed port 
-      tolerations:
-      - key: "fargate.amazonaws.com"
-        operator: "Exists"
-        effect: "NoSchedule"
