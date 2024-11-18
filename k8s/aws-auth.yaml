@@ -6,9 +6,9 @@ metadata:
 data:
   mapRoles: |
     - rolearn: arn:aws:iam::<ACCOUNT_ID>:role/codebuild-Iteamoa-MainPage-Build-service-role 
+      username: codebuild-user
       groups:
-        - system:bootstrappers
-        - system:nodes
+        - system:masters
   mapUsers: |
     - userarn: arn:aws:iam::<ACCOUNT_ID>:user/DevOps
       username: devops-user

@@ -1,5 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: main-service-config
-  namespace: default # Use your namespace if defined
