@@ -5,14 +5,10 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn: arn:aws:iam::<ACCOUNT_ID>:role/eks-test
+    - rolearn: arn:aws:iam::<ACCOUNT_ID>:role/codebuild-Iteamoa-MainPage-Build-service-role 
       groups:
         - system:bootstrappers
         - system:nodes
-    - rolearn: arn:aws:iam::<ACCOUNT_ID>:role/eks-test
-      username: eks-admin
-      groups:
-        - system:masters
   mapUsers: |
     - userarn: arn:aws:iam::<ACCOUNT_ID>:user/DevOps
       username: devops-user

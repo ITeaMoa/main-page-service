@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: mainpage-service
-        image: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
+        image: <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_DEFAULT_REGION>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
         ports:
         - containerPort: 8080  # Check container's exposed port 
