@@ -34,10 +34,8 @@ public class ItemEntity extends BaseEntity{
     private boolean savedFeed;
     private Map<String, Integer> Roles;
     private Map<String, Integer> recruitmentRoles;
-
     private String part;
     private StatusType status;
-
     private String feedType;
 
     public ItemEntity() {}

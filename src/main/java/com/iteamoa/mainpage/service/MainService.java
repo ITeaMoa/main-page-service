@@ -140,7 +140,7 @@ public class MainService {
         ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
         if(feed == null)
             throw new Exception("No feed exits");
-        feed.getApplyRoles().merge(applicationDto.getPart(), 1, Integer::sum);
+        feed.getRoles().merge(applicationDto.getPart(), 1, Integer::sum);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
 
         itemRepository.saveApplication(applicationDto);
@@ -154,7 +154,7 @@ public class MainService {
         ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
         if(feed == null)
             throw new Exception("No feed exits");
-        feed.getApplyRoles().merge(applicationDto.getPart(), -1, Integer::sum);
+        feed.getRoles().merge(applicationDto.getPart(), -1, Integer::sum);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
 
         itemRepository.deleteApplication(applicationDto);
