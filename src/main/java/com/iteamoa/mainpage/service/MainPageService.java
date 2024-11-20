@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class MainService {
+public class MainPageService {
     private final ItemRepository itemRepository;
 
     public FeedDto searchFeed(FeedDto feedDto) throws NoSuchElementException{
@@ -152,11 +151,12 @@ public class MainService {
         }
 
         ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
+        ItemEntity application = itemRepository.getApplication(applicationDto);
         if(feed == null)
             throw new Exception("No feed exits");
-        feed.getRecruitmentRoles().merge(applicationDto.getPart(), -1, Integer::sum);
+        feed.getRecruitmentRoles().merge(application.getPart(), -1, Integer::sum);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
 
-        itemRepository.deleteApplication(applicationDto);
+        itemRepository.deleteApplication(application);
     }
 }

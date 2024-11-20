@@ -13,5 +13,4 @@ public enum StatusType {
     StatusType(String status) {
         this.status = status;
     }
-
 }

@@ -11,8 +11,6 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-import java.net.URI;
-
 @Configuration
 public class DynamoDbConfig {
 

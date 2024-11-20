@@ -4,7 +4,7 @@ import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
-import com.iteamoa.mainpage.service.MainService;
+import com.iteamoa.mainpage.service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/main")
 @RequiredArgsConstructor
-public class FeedController {
+public class MainPageController {
 
-    private final MainService mainService;
+    private final MainPageService mainPageService;
 
     @GetMapping("/test1")
     public ResponseEntity<?> getFeed(@RequestBody FeedDto feedDto) {
-        FeedDto result = mainService.searchFeed(feedDto);
-
+        FeedDto result = mainPageService.searchFeed(feedDto);
         if (result == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
@@ -30,34 +29,34 @@ public class FeedController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/test2")
-    public ResponseEntity<?> saveFeed(@RequestBody FeedDto feedDto) {
-        try{
-            mainService.saveFeed(feedDto);
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+//    @PostMapping("/test2")
+//    public ResponseEntity<?> saveFeed(@RequestBody FeedDto feedDto) {
+//        try{
+//            mainService.saveFeed(feedDto);
+//        } catch (IllegalArgumentException e){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 
-    @DeleteMapping("/test3")
-    public ResponseEntity<?> deleteFeed(@RequestBody FeedDto feedDto) {
-        try{
-            mainService.deleteFeed(feedDto);
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+//    @DeleteMapping("/test3")
+//    public ResponseEntity<?> deleteFeed(@RequestBody FeedDto feedDto) {
+//        try{
+//            mainService.deleteFeed(feedDto);
+//        } catch (IllegalArgumentException e){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
 
     @GetMapping("/liked")
     public ResponseEntity<?> mostLikedFeedTask(@RequestParam String feedType) {
-        return ResponseEntity.ok(mainService.mostLikedFeed(feedType));
+        return ResponseEntity.ok(mainPageService.mostLikedFeed(feedType));
     }
 
     @GetMapping()
     public ResponseEntity<?> postedFeedTask(@RequestParam String feedType) {
-        return ResponseEntity.ok(mainService.postedFeed(feedType));
+        return ResponseEntity.ok(mainPageService.postedFeed(feedType));
     }
 
     @GetMapping("/search-tags")
@@ -66,7 +65,7 @@ public class FeedController {
         query.setFeedType(feedType);
         query.setTags(tags);
 
-        return ResponseEntity.ok(mainService.searchTag(query));
+        return ResponseEntity.ok(mainPageService.searchTag(query));
     }
 
     @GetMapping("/search-keyword")
@@ -75,13 +74,13 @@ public class FeedController {
         query.setFeedType(feedType);
         query.setKeyword(keyword);
 
-        return ResponseEntity.ok(mainService.keywordSearch(query));
+        return ResponseEntity.ok(mainPageService.keywordSearch(query));
     }
 
     @PostMapping("/like")
     public ResponseEntity<?> likeTask(@RequestBody LikeDto likeDto) {
         try{
-            mainService.saveLike(likeDto);
+            mainPageService.saveLike(likeDto);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -91,7 +90,7 @@ public class FeedController {
     @DeleteMapping("/like")
     public ResponseEntity<?> deleteLikeTask(@RequestBody LikeDto likeDto) {
         try{
-            mainService.deleteLike(likeDto);
+            mainPageService.deleteLike(likeDto);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -100,13 +99,13 @@ public class FeedController {
 
     @GetMapping("/like")
     public ResponseEntity<?> likeFeedTask(@RequestParam("userId") String userId){
-        return ResponseEntity.ok(mainService.likeFeed(userId));
+        return ResponseEntity.ok(mainPageService.likeFeed(userId));
     }
 
     @PostMapping("/application")
     public ResponseEntity<?> applicationFeed(@RequestBody ApplicationDto applicationDto) {
         try{
-            mainService.saveApplication(applicationDto);
+            mainPageService.saveApplication(applicationDto);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -117,7 +116,7 @@ public class FeedController {
     @DeleteMapping("/application")
     public ResponseEntity<?> deleteApplicationTask(@RequestBody ApplicationDto applicationDto) {
         try{
-            mainService.deleteApplication(applicationDto);
+            mainPageService.deleteApplication(applicationDto);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

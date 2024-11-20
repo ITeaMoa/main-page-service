@@ -1,6 +1,5 @@
 package com.iteamoa.mainpage.entity;
 
-
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 

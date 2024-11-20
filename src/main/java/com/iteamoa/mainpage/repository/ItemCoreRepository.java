@@ -60,16 +60,15 @@ public class ItemCoreRepository implements ItemRepository {
         final SdkIterable<Page<ItemEntity>> pagedResult = mostLikedFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
-                .attributesToProject("Pk", "Sk", "entityType", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus"));
+                .attributesToProject());
 
         List<ItemEntity> top3MostLikedFeed = new ArrayList<>();
         pagedResult.forEach(page -> {
             for (ItemEntity feed : page.items()) {
                 if (feed.getPostStatus())
                     top3MostLikedFeed.add(feed);
-
                 if (top3MostLikedFeed.size() == 3)
-                    return;
+                    break;
             }
         });
 
@@ -85,7 +84,7 @@ public class ItemCoreRepository implements ItemRepository {
         final SdkIterable<Page<ItemEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
-                .attributesToProject("Pk", "Sk", "entityType", "creatorId", "title", "tags", "deadline", "recruitmentNum", "likesCount", "postStatus", "timestamp"));
+                .attributesToProject());
         List<ItemEntity> postedFeeds = new ArrayList<>();
         pagedResult.forEach(page -> {
             for (ItemEntity feed : page.items()) {
@@ -114,8 +113,9 @@ public class ItemCoreRepository implements ItemRepository {
     public List<ItemEntity> queryLikeFeed(String pk){
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k
                 .partitionValue(KeyConverter.toPk(DynamoDbEntityType.USER, pk))  // PK 조건 설정
-                .sortValue("Like")
+                .sortValue(DynamoDbEntityType.LIKE.getType())
         );
+
         final DynamoDbIndex<ItemEntity> likeFeedIndex = table.index("Like-index");
         final SdkIterable<Page<ItemEntity>> pagedResult = likeFeedIndex.query(q -> q
                 .queryConditional(queryConditional)
@@ -128,15 +128,20 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
+    public ItemEntity getApplication(ApplicationDto applicationDto){
+        return table.getItem(KeyConverter.toKey(
+                KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
+                KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk())
+        ));
+    }
+
+    @Override
     public void saveApplication(ApplicationDto applicationDto){
         table.putItem(new ItemEntity(applicationDto));
     }
 
     @Override
-    public void deleteApplication(ApplicationDto applicationDto) {
-        table.deleteItem(KeyConverter.toKey(
-                KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk())
-        ));
+    public void deleteApplication(ItemEntity itemEntity) {
+        table.deleteItem(itemEntity);
     }
 }
