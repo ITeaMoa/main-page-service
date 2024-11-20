@@ -18,28 +18,6 @@ import java.util.NoSuchElementException;
 public class MainPageService {
     private final ItemRepository itemRepository;
 
-    public FeedDto searchFeed(FeedDto feedDto) throws NoSuchElementException{
-        ItemEntity itemEntity = itemRepository.getFeed(feedDto.getPk(), feedDto.getSk());
-        if (itemEntity == null) {
-            return null;
-        }
-        return FeedDto.toFeedDto(itemEntity);
-    }
-
-    public void saveFeed(FeedDto feedDto) throws IllegalArgumentException{
-        if (feedDto.getPk() == null || feedDto.getSk() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
-        }
-        itemRepository.saveFeed(feedDto);
-    }
-
-    public void deleteFeed(FeedDto feedDto) throws IllegalArgumentException{
-        if (feedDto.getPk() == null || feedDto.getSk() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
-        }
-        itemRepository.deleteFeed(feedDto.getPk(), feedDto.getSk());
-    }
-
     public List<FeedDto> mostLikedFeed(String feedType) {
         List<ItemEntity> itemEntities = itemRepository.queryMostLikedFeed(feedType);
 

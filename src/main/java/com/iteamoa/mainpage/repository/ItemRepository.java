@@ -10,9 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository {
-    void saveFeed(FeedDto feedDto);
     ItemEntity getFeed(String pk, String sk);
-    void deleteFeed(String pk, String sk);
     void updateFeed(FeedDto feedDto);
 
     List<ItemEntity> queryMostLikedFeed(String feedType);

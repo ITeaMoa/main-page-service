@@ -25,21 +25,8 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
-    public void saveFeed(FeedDto feedDto){
-        table.putItem(new ItemEntity(feedDto));
-    }
-
-    @Override
     public ItemEntity getFeed(String pk, String sk) {
         return table.getItem(KeyConverter.toKey(
-                KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
-                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
-        ));
-    }
-
-    @Override
-    public void deleteFeed(String pk, String sk) {
-        table.deleteItem(KeyConverter.toKey(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, pk),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, sk)
         ));

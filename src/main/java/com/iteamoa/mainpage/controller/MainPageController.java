@@ -19,36 +19,6 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
 
-    @GetMapping("/test1")
-    public ResponseEntity<?> getFeed(@RequestBody FeedDto feedDto) {
-        FeedDto result = mainPageService.searchFeed(feedDto);
-        if (result == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        return ResponseEntity.ok(result);
-    }
-
-//    @PostMapping("/test2")
-//    public ResponseEntity<?> saveFeed(@RequestBody FeedDto feedDto) {
-//        try{
-//            mainService.saveFeed(feedDto);
-//        } catch (IllegalArgumentException e){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//    }
-
-//    @DeleteMapping("/test3")
-//    public ResponseEntity<?> deleteFeed(@RequestBody FeedDto feedDto) {
-//        try{
-//            mainService.deleteFeed(feedDto);
-//        } catch (IllegalArgumentException e){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//    }
-
     @GetMapping("/liked")
     public ResponseEntity<?> mostLikedFeedTask(@RequestParam String feedType) {
         return ResponseEntity.ok(mainPageService.mostLikedFeed(feedType));
