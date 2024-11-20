@@ -1,5 +1,6 @@
 package com.iteamoa.mainpage.dto;
 
+import com.iteamoa.mainpage.constant.StatusType;
 import com.iteamoa.mainpage.entity.ItemEntity;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.AllArgsConstructor;
@@ -13,18 +14,22 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDto {
+public class ApplicationDto {
     private String pk;
     private String sk;
     private String entityType;
+    private String part;
+    private StatusType status;
     private String feedType;
     private LocalDateTime timestamp;
 
-    public static LikeDto toLikeDto(ItemEntity itemEntity) {
-        return new LikeDto(
+    public static ApplicationDto toApplicationDto(ItemEntity itemEntity) {
+        return new ApplicationDto(
                 KeyConverter.toStringId(itemEntity.getPk()),
                 KeyConverter.toStringId(itemEntity.getSk()),
                 itemEntity.getEntityType().getType(),
+                itemEntity.getPart(),
+                itemEntity.getStatus(),
                 itemEntity.getFeedType(),
                 itemEntity.getTimestamp()
         );

@@ -1,6 +1,5 @@
 package com.iteamoa.mainpage.entity;
 
-
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
@@ -13,8 +12,8 @@ public abstract class BaseEntity {
     private String sk;
     private LocalDateTime timestamp;
 
-    public BaseEntity() { }
-    public BaseEntity(String pk, String sk, LocalDateTime timestamp) {
+    public BaseEntity() {}
+    public BaseEntity(String pk, String sk) {
         this.pk = pk;
         this.sk = sk;
         this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);
