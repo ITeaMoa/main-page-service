@@ -1,7 +1,6 @@
 package com.iteamoa.mainpage.controller;
 
 import com.iteamoa.mainpage.dto.ApplicationDto;
-import com.iteamoa.mainpage.dto.FeedDto;
 import com.iteamoa.mainpage.dto.LikeDto;
 import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.service.MainPageService;

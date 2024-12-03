@@ -10,8 +10,13 @@ public class KeyConverter {
         return type.getType() + delimiter + id;
     }
 
-    public static String toStringId(String key) {return key.split(delimiter)[1];}
-
+    public static String toStringId(String key) {
+        if (key != null && key.contains(delimiter)) {
+            return key.split(delimiter)[1];
+        }
+        return null;
+    }
+    
     public static Key toKey(String Pk, String Sk){
         return Key.builder()
                 .partitionValue(Pk)
