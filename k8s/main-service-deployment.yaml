@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mainpage-service-deployment
-  namespace: iteamoa-mainpage-namespace
+  namespace: default #mainpage-namespace  # Match the Fargate namespace
   labels:
-    node: fargate
+    node: local
 spec:
   replicas: 1  # Two pods running the service
   selector:
     matchLabels:
-      node: fargate
+      node: local
   template:
     metadata:
       labels:
-        node: fargate
+        node: local
     spec:
       containers:
       - name: mainpage-service
-        image: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
+        image: main-page-local-1:latest #<AWS_ACCOUNT_ID>.dkr.ecr.<AWS_DEFAULT_REGION>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
         ports:
         - containerPort: 8080  # Check container's exposed port 
       tolerations:
