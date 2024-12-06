@@ -13,4 +13,5 @@ public class Comment {
     private String userId;
     private String comment;
     private LocalDateTime timestamp;
+    private String nickname;
 }
