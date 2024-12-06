@@ -10,16 +10,17 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedDto {
-    private Long pk;
+    private String pk;
     private String sk;
     private String entityType;
-    private Long creatorId;
+    private String creatorId;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -32,13 +33,15 @@ public class FeedDto {
     private boolean postStatus;
     private LocalDateTime timestamp;
     private boolean savedFeed;
+    private Map<String, Integer> roles;
+    private Map<String, Integer> recruitmentRoles;
 
     public static FeedDto toFeedDto(ItemEntity itemEntity){
         return new FeedDto(
-                KeyConverter.toLongId(itemEntity.getPk()),
-                KeyConverter.toStringType(itemEntity.getSk()),
-                itemEntity.getEntityType(),
-                KeyConverter.toLongId(itemEntity.getCreatorId()),
+                KeyConverter.toStringId(itemEntity.getPk()),
+                KeyConverter.toStringId(itemEntity.getSk()),
+                itemEntity.getEntityType().getType(),
+                KeyConverter.toStringId(itemEntity.getCreatorId()),
                 itemEntity.getTitle(),
                 itemEntity.getRecruitmentNum(),
                 itemEntity.getDeadline(),
@@ -50,7 +53,10 @@ public class FeedDto {
                 itemEntity.getComments(),
                 itemEntity.getPostStatus(),
                 itemEntity.getTimestamp(),
-                itemEntity.getSavedFeed()
+                itemEntity.getSavedFeed(),
+                itemEntity.getRoles(),
+                itemEntity.getRecruitmentRoles()
+
         );
     }
 

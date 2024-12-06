@@ -6,20 +6,17 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 public class KeyConverter {
     static final String delimiter = "#";
 
-    public static String toPk(DynamoDbEntityType type, Long id){
-        return type.getPrefix() + delimiter + id;
-    }
-
     public static String toPk(DynamoDbEntityType type, String id){
-        return type.getPrefix() + delimiter + id;
+        return type.getType() + delimiter + id;
     }
 
-    public static String toStringType(String key) {return key.split(delimiter)[1];}
-
-    public static Long toLongId(String key){
-        return Long.parseLong(key.split(delimiter)[1]);
+    public static String toStringId(String key) {
+        if (key != null && key.contains(delimiter)) {
+            return key.split(delimiter)[1];
+        }
+        return null;
     }
-
+    
     public static Key toKey(String Pk, String Sk){
         return Key.builder()
                 .partitionValue(Pk)

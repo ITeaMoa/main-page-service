@@ -15,10 +15,10 @@ public enum DynamoDbEntityType {
     LIKE("LIKE"),
     SAVEDFEED("SAVEDFEED");
 
-    private final String prefix;
+    private final String type;
 
-    DynamoDbEntityType(String prefix) {
-        this.prefix = prefix;
+    DynamoDbEntityType(String type) {
+        this.type = type;
     }
 
 }
