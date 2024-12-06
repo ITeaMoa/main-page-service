@@ -152,6 +152,3 @@ gradle-app.setting
 application.properties
 resources
 k8s/secret.yaml
-
-build
-
