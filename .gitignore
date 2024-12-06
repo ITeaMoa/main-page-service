@@ -150,5 +150,9 @@ gradle-app.setting
 
 ## properties File
 application.properties
+resources
+k8s/secret.yaml
+
+build
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,gradle,java,git,visualstudiocode
