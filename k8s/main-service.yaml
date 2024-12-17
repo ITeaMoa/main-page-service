@@ -5,7 +5,7 @@ metadata:
   namespace: mainpage-namespace
 spec:
   selector:
-    node: local #fargate
+    app: fargate
   ports:
     - protocol: TCP
       port: 80             # Public-facing port/Service port
