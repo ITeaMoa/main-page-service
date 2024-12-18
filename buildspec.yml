@@ -44,7 +44,9 @@ phases:
                      --build-arg AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ID
                      --build-arg AWS_SECRET_KEY=$AWS_SECRET_ACCESS_KEY
                      -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-
+      - echo "Var CHECK"
+      - echo $AWS_DYNAMODB_TABLE
+      - echo AWS_TABLE
       - echo "Listing Docker images to verify the built image:"
       - docker images
       - echo "Searching for our specific image:"
