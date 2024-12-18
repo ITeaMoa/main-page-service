@@ -5,6 +5,10 @@ phases:
     commands:
       # Ensure AWS CLI is installed
       - aws --version
+
+      # Delete the AWS CLI cache folder
+      - rm -rf ~/.aws/cli/cache
+
       # Install app dependencies
       - echo "Installing app dependencies..."
       - curl -LO https://dl.k8s.io/release/v1.27.2/bin/linux/amd64/kubectl   
