@@ -70,4 +70,4 @@ phases:
 
       # Optionally, confirm that the deployment was successful
       - echo "Deployment applied. Verifying pods..."
-      - kubectl get pods
+      - kubectl get pods -n main-namespace
