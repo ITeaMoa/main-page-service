@@ -5,6 +5,12 @@ FROM public.ecr.aws/docker/library/openjdk:17-jdk-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+ARG AWS_DEFAULT_REGION
+
+# Set environment variables
+ENV AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+
+
 # Copy the Gradle build files to the container
 COPY build.gradle settings.gradle gradlew /app/
 COPY gradle /app/gradle
