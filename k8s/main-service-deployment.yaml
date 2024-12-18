@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mainpage-service-deployment
-  namespace: mainpage-namespace  # Match the Fargate namespace
+  namespace: main-namespace  # Match the Fargate namespace
   labels:
     app: fargate
 spec:
@@ -16,8 +16,7 @@ spec:
         app: fargate
     spec:
       containers:
-      - name: mainpage-service
-        image: <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_DEFAULT_REGION>.amazonaws.com/iteamoa/mainpage:latest # Use ECR
-        imagePullPolicy: Never
+      - name: main-service
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/iteamoa/mainpage:latest # Use ECR
         ports:
         - containerPort: 8080  # Check container's exposed port 
