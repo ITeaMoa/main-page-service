@@ -16,7 +16,7 @@ ENV AWS_TABLE=${AWS_DYNAMODB_TABLE}
 ENV AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_KEY=${AWS_SECRET_ACCESS_KEY}
 
-run echo $AWS_DYNAMODB_TABLE
+RUN echo "AWS_TABLE is: ${AWS_TABLE}"
 
 # Copy the Gradle build files to the container
 COPY build.gradle settings.gradle gradlew /app/
