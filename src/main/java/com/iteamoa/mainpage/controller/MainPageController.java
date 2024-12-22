@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/main")
 @RequiredArgsConstructor
 public class MainPageController {
 
