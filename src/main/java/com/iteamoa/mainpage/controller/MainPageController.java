@@ -92,4 +92,9 @@ public class MainPageController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok("Connected successfully");
+    }
+
 }
