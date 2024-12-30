@@ -115,6 +115,14 @@ public class ItemCoreRepository implements ItemRepository {
     }
 
     @Override
+    public ItemEntity getLike(String pk, String sk) {
+        return table.getItem(KeyConverter.toKey(
+                KeyConverter.toPk(DynamoDbEntityType.USER, pk),
+                KeyConverter.toPk(DynamoDbEntityType.LIKE, sk)
+        ));
+    }
+
+    @Override
     public ItemEntity getApplication(ApplicationDto applicationDto){
         return table.getItem(KeyConverter.toKey(
                 KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),

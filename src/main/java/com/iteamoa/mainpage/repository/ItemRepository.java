@@ -20,6 +20,7 @@ public interface ItemRepository {
     void deleteLikeFeed(LikeDto likeDto);
 
     List<ItemEntity> queryLikeFeed(String pk);
+    ItemEntity getLike(String pk, String sk);
 
     ItemEntity getApplication(ApplicationDto applicationDto);
     void saveApplication(ApplicationDto applicationDto);

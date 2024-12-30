@@ -87,8 +87,11 @@ public class MainPageService {
             throw new Exception("Pk or SK cannot be null");
         }
         ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
+        ItemEntity like = itemRepository.getLike(likeDto.getPk(), likeDto.getSk());
         if(feed == null)
             throw new Exception("No feed exits");
+        if(like != null)
+            throw new Exception("Already liked");
         feed.setLikesCount(feed.getLikesCount()+1);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
 
@@ -99,10 +102,12 @@ public class MainPageService {
         if (likeDto.getPk() == null || likeDto.getSk() == null || likeDto.getFeedType() == null) {
             throw new Exception("Pk or SK cannot be null");
         }
-
         ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
+        ItemEntity like = itemRepository.getLike(likeDto.getPk(), likeDto.getSk());
         if(feed == null)
             throw new Exception("No feed exits");
+        if(like == null)
+            throw new Exception("No like exits");
         feed.setLikesCount(feed.getLikesCount()-1);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
 
