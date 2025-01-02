@@ -21,6 +21,7 @@ public class FeedDto {
     private String sk;
     private String entityType;
     private String creatorId;
+    private String nickname;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -42,6 +43,7 @@ public class FeedDto {
                 KeyConverter.toStringId(itemEntity.getSk()),
                 itemEntity.getEntityType().getType(),
                 KeyConverter.toStringId(itemEntity.getCreatorId()),
+                itemEntity.getNickname(),
                 itemEntity.getTitle(),
                 itemEntity.getRecruitmentNum(),
                 itemEntity.getDeadline(),

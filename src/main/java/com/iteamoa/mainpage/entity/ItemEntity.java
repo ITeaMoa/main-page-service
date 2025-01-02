@@ -21,6 +21,7 @@ public class ItemEntity extends BaseEntity{
     private DynamoDbEntityType entityType;
 
     private String creatorId;
+    private String nickname;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -46,6 +47,7 @@ public class ItemEntity extends BaseEntity{
         );
         this.entityType = DynamoDbEntityType.FEED;
         this.creatorId = KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId());
+        this.nickname = feedDto.getNickname();
         this.title = feedDto.getTitle();
         this.recruitmentNum = feedDto.getRecruitmentNum();
         this.deadline = feedDto.getDeadline();
@@ -90,6 +92,11 @@ public class ItemEntity extends BaseEntity{
     @DynamoDbAttribute("creatorId")
     public String getCreatorId(){
         return creatorId;
+    }
+
+    @DynamoDbAttribute("nickname")
+    public String getNickname(){
+        return nickname;
     }
 
     @DynamoDbAttribute("title")
