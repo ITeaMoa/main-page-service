@@ -78,6 +78,10 @@ phases:
       - kubectl apply -f k8s/main-service-deployment.yaml
       - kubectl apply -f k8s/main-service.yaml
 
+      # Force a restart to ensure the deployment picks up the new image
+      - echo "Forcing deployment rollout to apply the new image..."
+      - kubectl rollout restart deployment mainpage-service-deployment -n main-namespace
+
       # Optionally, confirm that the deployment was successful
       - echo "Deployment applied. Verifying pods..."
       - kubectl get pods -n main-namespace
