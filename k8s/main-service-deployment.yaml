@@ -5,15 +5,18 @@ metadata:
   namespace: main-namespace  # Match the Fargate namespace
   labels:
     app: fargate
+    svc: main
 spec:
   replicas: 1  # Two pods running the service
   selector:
     matchLabels:
       app: fargate
+      svc: main
   template:
     metadata:
       labels:
         app: fargate
+        svc: main
     spec:
       containers:
       - name: main-service
