@@ -21,7 +21,7 @@ ENV AWS_SECRET_KEY=${AWS_SECRET_KEY}
 EXPOSE 8080 
 
 # Copy the generated JAR file into the container
-COPY build/libs/mypage-0.0.1-SNAPSHOT.jar /app/mypage.jar
+COPY build/libs/mainpage-0.0.1-SNAPSHOT.jar /app/mainpage.jar
 
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/mainpage.jar"]
