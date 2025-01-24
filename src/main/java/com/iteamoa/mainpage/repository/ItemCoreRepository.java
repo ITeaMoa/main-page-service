@@ -13,8 +13,8 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ItemCoreRepository implements ItemRepository {
@@ -49,17 +49,11 @@ public class ItemCoreRepository implements ItemRepository {
                 .scanIndexForward(false)
                 .attributesToProject());
 
-        List<ItemEntity> top3MostLikedFeed = new ArrayList<>();
-        pagedResult.forEach(page -> {
-            for (ItemEntity feed : page.items()) {
-                if (feed.getPostStatus())
-                    top3MostLikedFeed.add(feed);
-                if (top3MostLikedFeed.size() == 3)
-                    break;
-            }
-        });
-
-        return top3MostLikedFeed;
+        return pagedResult.stream()
+                .flatMap(page -> page.items().stream())
+                .filter(ItemEntity::getPostStatus)
+                .limit(3)
+                .collect(Collectors.toList());
     }
     
     @Override
@@ -67,20 +61,17 @@ public class ItemCoreRepository implements ItemRepository {
         QueryConditional queryConditional = QueryConditional.keyEqualTo(k -> k.partitionValue(
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedType)
         ));
+
         final DynamoDbIndex<ItemEntity> postedFeedIndex = table.index("PostedFeed-index");
         final SdkIterable<Page<ItemEntity>> pagedResult = postedFeedIndex.query(q->q
                 .queryConditional(queryConditional)
                 .scanIndexForward(false)
                 .attributesToProject());
-        List<ItemEntity> postedFeeds = new ArrayList<>();
-        pagedResult.forEach(page -> {
-            for (ItemEntity feed : page.items()) {
-                if (feed.getPostStatus())
-                    postedFeeds.add(feed);
-            }
-        });
 
-        return postedFeeds;
+        return pagedResult.stream()
+                .flatMap(page -> page.items().stream())
+                .filter(ItemEntity::getPostStatus)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -109,9 +100,9 @@ public class ItemCoreRepository implements ItemRepository {
                 .scanIndexForward(false)
                 .attributesToProject());
 
-        List<ItemEntity> likedFeeds = new ArrayList<>();
-        pagedResult.forEach(page -> likedFeeds.addAll(page.items()));
-        return likedFeeds;
+        return pagedResult.stream()
+                .flatMap(page -> page.items().stream())
+                .collect(Collectors.toList());
     }
 
     @Override
