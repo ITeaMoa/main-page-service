@@ -13,7 +13,7 @@ public abstract class BaseEntity {
     private LocalDateTime timestamp;
 
     public BaseEntity() {}
-    public BaseEntity(String pk, String sk) {
+    public BaseEntity(String pk, String sk, LocalDateTime timestamp) {
         this.pk = pk;
         this.sk = sk;
         this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);

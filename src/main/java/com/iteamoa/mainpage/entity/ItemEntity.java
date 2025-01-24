@@ -43,7 +43,8 @@ public class ItemEntity extends BaseEntity{
     public ItemEntity(FeedDto feedDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, feedDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk())
+                KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk()),
+                feedDto.getTimestamp()
         );
         this.entityType = DynamoDbEntityType.FEED;
         this.creatorId = KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId());
@@ -66,7 +67,8 @@ public class ItemEntity extends BaseEntity{
     public ItemEntity(LikeDto likeDto) {
         super(
                 KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
-                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk())
+                KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk()),
+                likeDto.getTimestamp()
         );
         this.entityType = DynamoDbEntityType.LIKE;
         this.feedType = likeDto.getFeedType();
@@ -75,7 +77,8 @@ public class ItemEntity extends BaseEntity{
     public ItemEntity(ApplicationDto applicationDto) {
         super(
             KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
-            KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk())
+            KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk()),
+            applicationDto.getTimestamp()
         );
         this.entityType = DynamoDbEntityType.APPLICATION;
         this.part = applicationDto.getPart();

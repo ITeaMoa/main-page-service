@@ -9,9 +9,10 @@ import com.iteamoa.mainpage.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,127 +20,90 @@ public class MainPageService {
     private final ItemRepository itemRepository;
 
     public List<FeedDto> mostLikedFeed(String feedType) {
-        List<ItemEntity> itemEntities = itemRepository.queryMostLikedFeed(feedType);
-
-        List<FeedDto> feedDTOs = new ArrayList<>();
-        for (ItemEntity itemEntity : itemEntities)
-            feedDTOs.add(FeedDto.toFeedDto(itemEntity));
-
-        return feedDTOs;
+        return itemRepository.queryMostLikedFeed(feedType).stream()
+                .map(FeedDto::toFeedDto)
+                .collect(Collectors.toList());
     }
 
     public List<FeedDto> postedFeed(String feedType) {
-        List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(feedType);
-
-        List<FeedDto> feedDTOs = new ArrayList<>();
-        for (ItemEntity itemEntity : itemEntities) {
-            feedDTOs.add(FeedDto.toFeedDto(itemEntity));
-        }
-
-        return feedDTOs;
+        return itemRepository.queryPostedFeed(feedType).stream()
+                .map(FeedDto::toFeedDto)
+                .collect(Collectors.toList());
     }
 
     public List<FeedDto> searchTag(QueryDto query) {
         List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(query.getFeedType());
-        List<FeedDto> feedDTOs = new ArrayList<>();
-        for (ItemEntity feedEntity : itemEntities) {
-            boolean exist = true;
-            List<String> feedTags = feedEntity.getTags();
 
-            for(String tag : query.getTags()) {
-                if (!feedTags.contains(tag)){
-                    exist = false;
-                    break;
-                }
-            }
-            if (exist) {
-                feedDTOs.add(FeedDto.toFeedDto(feedEntity));
-            }
-        }
+        return itemEntities.stream()
+                .filter(feedEntity -> containsAllTags(feedEntity.getTags(), query.getTags()))
+                .map(FeedDto::toFeedDto)
+                .collect(Collectors.toList());
+    }
 
-        return feedDTOs;
+    private boolean containsAllTags(List<String> feedTags, List<String> queryTags) {
+        return queryTags.stream().allMatch(feedTags::contains);
     }
 
     public List<FeedDto> keywordSearch(QueryDto query) {
-        List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(query.getFeedType());
-        List<FeedDto> feedDTOs = new ArrayList<>();
-
-        for (ItemEntity itemEntity : itemEntities) {
-            String feedTitle = itemEntity.getTitle().toLowerCase();
-            if (feedTitle.contains(query.getKeyword().toLowerCase()))
-                feedDTOs.add(FeedDto.toFeedDto(itemEntity));
-        }
-
-        return feedDTOs;
+        return itemRepository.queryPostedFeed(query.getFeedType()).stream()
+                .filter(itemEntity -> itemEntity.getTitle().toLowerCase().contains(query.getKeyword().toLowerCase()))
+                .map(FeedDto::toFeedDto)
+                .collect(Collectors.toList());
     }
 
     public List<LikeDto> likeFeed(String userId) {
-        List<ItemEntity> itemEntities = itemRepository.queryLikeFeed(userId);
-        List<LikeDto> likeDTOs = new ArrayList<>();
-        for (ItemEntity itemEntity : itemEntities)
-            likeDTOs.add(LikeDto.toLikeDto(itemEntity));
-
-        return likeDTOs;
+        return itemRepository.queryLikeFeed(userId).stream()
+                .map(LikeDto::toLikeDto)
+                .collect(Collectors.toList());
     }
 
     public void saveLike(LikeDto likeDto) throws Exception{
-        if (likeDto.getPk() == null || likeDto.getSk() == null || likeDto.getFeedType() == null) {
-            throw new Exception("Pk or SK cannot be null");
-        }
-        ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
-        ItemEntity like = itemRepository.getLike(likeDto.getPk(), likeDto.getSk());
-        if(feed == null)
-            throw new Exception("No feed exits");
-        if(like != null)
-            throw new Exception("Already liked");
+        Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
+        Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(likeDto.getFeedType(), "FeedType cannot be null");
+
+        ItemEntity feed = Objects.requireNonNull(itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType()));
+        Optional.ofNullable(itemRepository.getLike(likeDto.getPk(), likeDto.getSk()))
+                .ifPresent(item -> {
+                    throw new RuntimeException("Already liked");
+                });
         feed.setLikesCount(feed.getLikesCount()+1);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
-
         itemRepository.saveLikeFeed(likeDto);
     }
 
     public void deleteLike(LikeDto likeDto) throws Exception{
-        if (likeDto.getPk() == null || likeDto.getSk() == null || likeDto.getFeedType() == null) {
-            throw new Exception("Pk or SK cannot be null");
-        }
-        ItemEntity feed = itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType());
-        ItemEntity like = itemRepository.getLike(likeDto.getPk(), likeDto.getSk());
-        if(feed == null)
-            throw new Exception("No feed exits");
-        if(like == null)
-            throw new Exception("No like exits");
+        Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
+        Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(likeDto.getFeedType(), "FeedType cannot be null");
+
+        ItemEntity feed = Objects.requireNonNull(itemRepository.getFeed(likeDto.getSk(), likeDto.getFeedType()));
+        Optional.ofNullable(itemRepository.getLike(likeDto.getPk(), likeDto.getSk()))
+                .orElseThrow(() -> new Exception("No like exists"));
         feed.setLikesCount(feed.getLikesCount()-1);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
-
         itemRepository.deleteLikeFeed(likeDto);
     }
 
     public void saveApplication(ApplicationDto applicationDto) throws Exception {
-        if (applicationDto.getPk() == null || applicationDto.getSk() == null || applicationDto.getPart() == null) {
-            throw new Exception("Pk or SK cannot be null");
-        }
+        Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
+        Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(applicationDto.getPart(), "Part cannot be null");
 
-        ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
-        if(feed == null)
-            throw new Exception("No feed exits");
+        ItemEntity feed = Objects.requireNonNull(itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType()));
         feed.getRecruitmentRoles().merge(applicationDto.getPart(), 1, Integer::sum);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
-
         itemRepository.saveApplication(applicationDto);
     }
 
     public void deleteApplication(ApplicationDto applicationDto) throws Exception {
-        if (applicationDto.getPk() == null || applicationDto.getSk() == null) {
-            throw new IllegalArgumentException("Pk or SK cannot be null");
-        }
+        Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
+        Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
 
-        ItemEntity feed = itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType());
+        ItemEntity feed = Objects.requireNonNull(itemRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType()));
         ItemEntity application = itemRepository.getApplication(applicationDto);
-        if(feed == null)
-            throw new Exception("No feed exits");
         feed.getRecruitmentRoles().merge(application.getPart(), -1, Integer::sum);
         itemRepository.updateFeed(FeedDto.toFeedDto(feed));
-
         itemRepository.deleteApplication(application);
     }
 }
