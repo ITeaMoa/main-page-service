@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class ApplicationDto {
     private String pk;
     private String sk;
+    private String creatorId;
     private String entityType;
     private String part;
     private StatusType status;
@@ -27,6 +28,7 @@ public class ApplicationDto {
         return new ApplicationDto(
                 KeyConverter.toStringId(itemEntity.getPk()),
                 KeyConverter.toStringId(itemEntity.getSk()),
+                itemEntity.getCreatorId(),
                 itemEntity.getEntityType().getType(),
                 itemEntity.getPart(),
                 itemEntity.getStatus(),

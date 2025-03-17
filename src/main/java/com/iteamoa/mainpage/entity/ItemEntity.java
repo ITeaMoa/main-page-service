@@ -20,7 +20,6 @@ import java.util.Map;
 public class ItemEntity extends BaseEntity{
     private DynamoDbEntityType entityType;
 
-    private String creatorId;
     private String nickname;
     private String title;
     private int recruitmentNum;
@@ -44,10 +43,10 @@ public class ItemEntity extends BaseEntity{
         super(
                 KeyConverter.toPk(DynamoDbEntityType.FEED, feedDto.getPk()),
                 KeyConverter.toPk(DynamoDbEntityType.FEEDTYPE, feedDto.getSk()),
-                feedDto.getTimestamp()
+                feedDto.getTimestamp(),
+                KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId())
         );
         this.entityType = DynamoDbEntityType.FEED;
-        this.creatorId = KeyConverter.toPk(DynamoDbEntityType.USER, feedDto.getCreatorId());
         this.nickname = feedDto.getNickname();
         this.title = feedDto.getTitle();
         this.recruitmentNum = feedDto.getRecruitmentNum();
@@ -68,7 +67,8 @@ public class ItemEntity extends BaseEntity{
         super(
                 KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk()),
                 KeyConverter.toPk(DynamoDbEntityType.LIKE, likeDto.getSk()),
-                likeDto.getTimestamp()
+                likeDto.getTimestamp(),
+                KeyConverter.toPk(DynamoDbEntityType.USER, likeDto.getPk())
         );
         this.entityType = DynamoDbEntityType.LIKE;
         this.feedType = likeDto.getFeedType();
@@ -78,7 +78,8 @@ public class ItemEntity extends BaseEntity{
         super(
             KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk()),
             KeyConverter.toPk(DynamoDbEntityType.APPLICATION, applicationDto.getSk()),
-            applicationDto.getTimestamp()
+            applicationDto.getTimestamp(),
+            KeyConverter.toPk(DynamoDbEntityType.USER, applicationDto.getPk())
         );
         this.entityType = DynamoDbEntityType.APPLICATION;
         this.part = applicationDto.getPart();
@@ -92,12 +93,8 @@ public class ItemEntity extends BaseEntity{
         return entityType;
     }
 
-    @DynamoDbAttribute("creatorId")
-    public String getCreatorId(){
-        return creatorId;
-    }
-
     @DynamoDbAttribute("nickname")
+    @DynamoDbSecondaryPartitionKey(indexNames = {"Nickname-index"})
     public String getNickname(){
         return nickname;
     }
@@ -158,6 +155,7 @@ public class ItemEntity extends BaseEntity{
     }
 
     @DynamoDbAttribute("part")
+    @DynamoDbSecondarySortKey(indexNames = {"Application-index"})
     public String getPart(){
         return part;
     }

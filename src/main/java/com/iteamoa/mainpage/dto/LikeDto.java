@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class LikeDto {
     private String pk;
     private String sk;
+    private String creatorId;
     private String entityType;
     private String feedType;
     private LocalDateTime timestamp;
@@ -24,6 +25,7 @@ public class LikeDto {
         return new LikeDto(
                 KeyConverter.toStringId(itemEntity.getPk()),
                 KeyConverter.toStringId(itemEntity.getSk()),
+                itemEntity.getCreatorId(),
                 itemEntity.getEntityType().getType(),
                 itemEntity.getFeedType(),
                 itemEntity.getTimestamp()
