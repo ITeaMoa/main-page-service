@@ -12,6 +12,7 @@ public abstract class BaseEntity {
     private String sk;
     private LocalDateTime timestamp;
     private String creatorId;
+    private Boolean userStatus;
 
     public BaseEntity() {}
     public BaseEntity(String pk, String sk, LocalDateTime timestamp, String creatorId) {
@@ -45,6 +46,12 @@ public abstract class BaseEntity {
     @DynamoDbSecondaryPartitionKey(indexNames = {"UserStatus-index", "SearchByCreator-index"})
     public String getCreatorId(){
         return creatorId;
+    }
+
+    @DynamoDbAttribute("userStatus")
+    @DynamoDbSecondarySortKey(indexNames = {"UserStatus-index"})
+    public boolean getUserStatus(){
+        return userStatus;
     }
 
 }
