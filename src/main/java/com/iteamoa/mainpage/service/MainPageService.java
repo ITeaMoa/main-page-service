@@ -21,12 +21,14 @@ public class MainPageService {
 
     public List<FeedDto> mostLikedFeed(String feedType) {
         return itemRepository.queryMostLikedFeed(feedType).stream()
+                .filter(ItemEntity::getUserStatus)
                 .map(FeedDto::toFeedDto)
                 .collect(Collectors.toList());
     }
 
     public List<FeedDto> postedFeed(String feedType) {
         return itemRepository.queryPostedFeed(feedType).stream()
+                .filter(ItemEntity::getUserStatus)
                 .map(FeedDto::toFeedDto)
                 .collect(Collectors.toList());
     }
@@ -35,6 +37,7 @@ public class MainPageService {
         List<ItemEntity> itemEntities = itemRepository.queryPostedFeed(query.getFeedType());
 
         return itemEntities.stream()
+                .filter(ItemEntity::getUserStatus)
                 .filter(feedEntity -> containsAllTags(feedEntity.getTags(), query.getTags()))
                 .map(FeedDto::toFeedDto)
                 .collect(Collectors.toList());
@@ -46,6 +49,7 @@ public class MainPageService {
 
     public List<FeedDto> keywordSearch(QueryDto query) {
         return itemRepository.queryPostedFeed(query.getFeedType()).stream()
+                .filter(ItemEntity::getUserStatus)
                 .filter(itemEntity -> itemEntity.getTitle().toLowerCase().contains(query.getKeyword().toLowerCase()))
                 .map(FeedDto::toFeedDto)
                 .collect(Collectors.toList());
@@ -53,6 +57,7 @@ public class MainPageService {
 
     public List<LikeDto> likeFeed(String userId) {
         return itemRepository.queryLikeFeed(userId).stream()
+                .filter(ItemEntity::getUserStatus)
                 .map(LikeDto::toLikeDto)
                 .collect(Collectors.toList());
     }

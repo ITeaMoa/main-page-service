@@ -20,6 +20,7 @@ public abstract class BaseEntity {
         this.sk = sk;
         this.timestamp = Objects.requireNonNullElseGet(timestamp, LocalDateTime::now);
         this.creatorId = creatorId;
+        this.userStatus = false;
     }
 
     @DynamoDbPartitionKey
@@ -43,13 +44,13 @@ public abstract class BaseEntity {
     }
 
     @DynamoDbAttribute("creatorId")
-    @DynamoDbSecondaryPartitionKey(indexNames = {"UserStatus-index", "SearchByCreator-index"})
+    @DynamoDbSecondaryPartitionKey(indexNames = {"CreatorId-index", "SearchByCreator-index"})
     public String getCreatorId(){
         return creatorId;
     }
 
     @DynamoDbAttribute("userStatus")
-    @DynamoDbSecondarySortKey(indexNames = {"UserStatus-index"})
+    @DynamoDbSecondarySortKey(indexNames = {"CreatorId-index"})
     public boolean getUserStatus(){
         return userStatus;
     }
