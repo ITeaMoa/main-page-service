@@ -2,21 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mainpage-service-deployment
-  namespace: main-namespace  # Match the Fargate namespace
+  namespace: mainpage-namespace 
   labels:
-    app: fargate
-    svc: main
+    svc: mainpage
 spec:
   replicas: 1  # Two pods running the service
   selector:
     matchLabels:
-      app: fargate
-      svc: main
+      svc: mainpage
   template:
     metadata:
       labels:
-        app: fargate
-        svc: main
+        svc: mainpage
     spec:
       containers:
       - name: main-service

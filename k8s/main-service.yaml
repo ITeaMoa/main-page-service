@@ -2,11 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mainpage-service
-  namespace: main-namespace
+  namespace: mainpage-namespace
 spec:                                  
   selector:
-    app: fargate
-    svc: main
+    svc: mainpage
   ports:
     - protocol: TCP
       port: 80             # Public-facing port/Service port
