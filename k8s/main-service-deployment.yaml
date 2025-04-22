@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mainpage-service-deployment
+  name: mainpage-deployment
   namespace: mainpage-namespace 
   labels:
     svc: mainpage
@@ -16,7 +16,7 @@ spec:
         svc: mainpage
     spec:
       imagePullSecrets: 
-        - name: ecr-registry-secret
+        - name: ecr-secret
       containers:
        - name: main-service
          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest # Use ECR
