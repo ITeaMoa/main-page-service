@@ -16,8 +16,8 @@ jobs:
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2 
         
       - name: Log in to Amazon ECR
@@ -25,9 +25,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest .
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest .
       
       - name: Push Docker image to ECR
         run: |
-          docker push 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest
         
