@@ -25,11 +25,17 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build --build-arg AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}
-            --build-arg AWS_TABLE=${{ secrets.AWS_TABLE }}
-            --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }}
-            --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            -t $IMAGE_REPO_NAME:latest .
+          docker build \
+            --build-arg AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
+            --build-arg AWS_TABLE=${{ secrets.AWS_TABLE }} \
+            --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+            -t 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest .
+        # env:
+        #   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        #   AWS_REGION: ${{ secrets.AWS_REGION }}
+        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
       - name: Push Docker image to ECR
         run: |
