@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.utils;
+package mainpage.utils;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import software.amazon.awssdk.enhanced.dynamodb.Key;

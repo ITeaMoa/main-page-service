@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.dto;
+package mainpage.dto;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import com.iteamoa.mainpage.constant.StatusType;

@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.constant;
+package mainpage.constant;
 
 import lombok.Getter;
 

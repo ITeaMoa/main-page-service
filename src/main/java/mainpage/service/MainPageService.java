@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.service;
+package mainpage.service;
 
 import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.FeedDto;
@@ -84,7 +84,9 @@ public class MainPageService {
 
         FeedEntity feedEntity = Objects.requireNonNull(feedRepository.getFeed(likeDto.getSk(), likeDto.getFeedType()));
         Optional.ofNullable(likeRepository.getLike(new LikeEntity(likeDto)))
-                .orElseThrow(() -> new Exception("No like exists"));
+                .ifPresent(item -> {
+                    throw new RuntimeException("Already Non liked");
+                });
         feedEntity.setLikesCount(feedEntity.getLikesCount()-1);
         feedRepository.updateFeed(feedEntity);
         likeRepository.saveLike(new LikeEntity(likeDto));
@@ -104,11 +106,11 @@ public class MainPageService {
     public void deleteApplication(ApplicationDto applicationDto) throws Exception {
         Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(applicationDto.getPart(), "Part cannot be null");
 
         FeedEntity feedEntity = Objects.requireNonNull(feedRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType()));
-        ApplicationEntity applicationEntity = applicationRepository.getApplication(new ApplicationEntity(applicationDto));
-        feedEntity.getRecruitmentRoles().merge(applicationEntity.getPart(), -1, Integer::sum);
+        feedEntity.getRecruitmentRoles().merge(applicationDto.getPart(), -1, Integer::sum);
         feedRepository.updateFeed(feedEntity);
-        applicationRepository.deleteApplication(applicationEntity);
+        applicationRepository.saveApplication(new ApplicationEntity(applicationDto));
     }
 }

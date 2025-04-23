@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.controller;
+package mainpage.controller;
 
 import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.LikeDto;

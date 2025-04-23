@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.utils;
+package mainpage.utils;
 
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.AttributeConverter;

@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.dto;
+package mainpage.dto;
 
 import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.utils.Comment;

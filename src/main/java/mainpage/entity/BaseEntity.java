@@ -1,4 +1,4 @@
-package com.iteamoa.mainpage.entity;
+package mainpage.entity;
 
 import com.iteamoa.mainpage.constant.DynamoDbEntityType;
 import com.iteamoa.mainpage.utils.KeyConverter;
