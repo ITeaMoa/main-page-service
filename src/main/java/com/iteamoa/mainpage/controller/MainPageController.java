@@ -2,7 +2,6 @@ package com.iteamoa.mainpage.controller;
 
 import com.iteamoa.mainpage.dto.ApplicationDto;
 import com.iteamoa.mainpage.dto.LikeDto;
-import com.iteamoa.mainpage.dto.QueryDto;
 import com.iteamoa.mainpage.service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,45 +18,37 @@ public class MainPageController {
     private final MainPageService mainPageService;
 
     @GetMapping("/liked")
-    public ResponseEntity<?> mostLikedFeedTask(@RequestParam String feedType) {
-        return ResponseEntity.ok(mainPageService.mostLikedFeed(feedType));
+    public ResponseEntity<?> getMostLikedFeed(@RequestParam String feedType) {
+        return ResponseEntity.ok(mainPageService.getMostLikedFeed(feedType));
     }
 
     @GetMapping()
-    public ResponseEntity<?> postedFeedTask(@RequestParam String feedType) {
-        return ResponseEntity.ok(mainPageService.postedFeed(feedType));
+    public ResponseEntity<?> getPostedFeed(@RequestParam String feedType) {
+        return ResponseEntity.ok(mainPageService.getPostedFeed(feedType));
     }
 
     @GetMapping("/search-tags")
-    public ResponseEntity<?> tagSearchTask(@RequestParam String feedType, @RequestParam List<String> tags) {
-        QueryDto query = new QueryDto();
-        query.setFeedType(feedType);
-        query.setTags(tags);
-
-        return ResponseEntity.ok(mainPageService.searchTag(query));
+    public ResponseEntity<?> getTagSearch(@RequestParam String feedType, @RequestParam List<String> tags) {
+        return ResponseEntity.ok(mainPageService.getSearchTag(feedType, tags));
     }
 
     @GetMapping("/search-keyword")
-    public ResponseEntity<?> keywordSearchTask(@RequestParam String feedType, @RequestParam String keyword) {
-        QueryDto query = new QueryDto();
-        query.setFeedType(feedType);
-        query.setKeyword(keyword);
-
-        return ResponseEntity.ok(mainPageService.keywordSearch(query));
+    public ResponseEntity<?> getKeywordSearch(@RequestParam String feedType, @RequestParam String keyword) {
+        return ResponseEntity.ok(mainPageService.getKeywordSearch(feedType, keyword));
     }
 
     @PostMapping("/like")
-    public ResponseEntity<?> likeTask(@RequestBody LikeDto likeDto) {
+    public ResponseEntity<String> saveLike(@RequestBody LikeDto likeDto) {
         try{
             mainPageService.saveLike(likeDto);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<?> deleteLikeTask(@RequestBody LikeDto likeDto) {
+    public ResponseEntity<?> deleteLike(@RequestBody LikeDto likeDto) {
         try{
             mainPageService.deleteLike(likeDto);
         } catch (Exception e){
@@ -67,12 +58,12 @@ public class MainPageController {
     }
 
     @GetMapping("/like")
-    public ResponseEntity<?> likeFeedTask(@RequestParam("userId") String userId){
+    public ResponseEntity<?> getLike(@RequestParam("userId") String userId){
         return ResponseEntity.ok(mainPageService.likeFeed(userId));
     }
 
     @PostMapping("/application")
-    public ResponseEntity<?> applicationFeed(@RequestBody ApplicationDto applicationDto) {
+    public ResponseEntity<?> saveApplication(@RequestBody ApplicationDto applicationDto) {
         try{
             mainPageService.saveApplication(applicationDto);
         } catch (Exception e){
@@ -83,7 +74,7 @@ public class MainPageController {
     }
 
     @DeleteMapping("/application")
-    public ResponseEntity<?> deleteApplicationTask(@RequestBody ApplicationDto applicationDto) {
+    public ResponseEntity<?> deleteApplication(@RequestBody ApplicationDto applicationDto) {
         try{
             mainPageService.deleteApplication(applicationDto);
         } catch (Exception e){
@@ -96,5 +87,4 @@ public class MainPageController {
     public ResponseEntity<?> test() {
         return ResponseEntity.ok("Connected successfully");
     }
-
 }

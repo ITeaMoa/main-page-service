@@ -1,6 +1,6 @@
 package com.iteamoa.mainpage.dto;
 
-import com.iteamoa.mainpage.entity.ItemEntity;
+import com.iteamoa.mainpage.entity.LikeEntity;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,14 +21,14 @@ public class LikeDto {
     private String feedType;
     private LocalDateTime timestamp;
 
-    public static LikeDto toLikeDto(ItemEntity itemEntity) {
+    public static LikeDto toLikeDto(LikeEntity likeEntity) {
         return new LikeDto(
-                KeyConverter.toStringId(itemEntity.getPk()),
-                KeyConverter.toStringId(itemEntity.getSk()),
-                itemEntity.getCreatorId(),
-                itemEntity.getEntityType().getType(),
-                itemEntity.getFeedType(),
-                itemEntity.getTimestamp()
+                KeyConverter.toStringId(likeEntity.getPk()),
+                KeyConverter.toStringId(likeEntity.getSk()),
+                likeEntity.getCreatorId(),
+                likeEntity.getEntityType().getType(),
+                likeEntity.getFeedType(),
+                likeEntity.getTimestamp()
         );
     }
 }

@@ -13,7 +13,8 @@ public enum DynamoDbEntityType {
     NOTIFICATION("NOTIFICATION"),
     APPLICATION("APPLICATION"),
     LIKE("LIKE"),
-    SAVEDFEED("SAVEDFEED");
+    SAVEDFEED("SAVEDFEED"),
+    TIMESTAMP("TIMESTAMP");
 
     private final String type;
 

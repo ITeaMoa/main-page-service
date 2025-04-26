@@ -1,6 +1,6 @@
 package com.iteamoa.mainpage.dto;
 
-import com.iteamoa.mainpage.entity.ItemEntity;
+import com.iteamoa.mainpage.entity.FeedEntity;
 import com.iteamoa.mainpage.utils.Comment;
 import com.iteamoa.mainpage.utils.KeyConverter;
 import lombok.AllArgsConstructor;
@@ -19,9 +19,9 @@ import java.util.Map;
 public class FeedDto {
     private String pk;
     private String sk;
+    private String nickname;
     private String entityType;
     private String creatorId;
-    private String nickname;
     private String title;
     private int recruitmentNum;
     private LocalDateTime deadline;
@@ -37,28 +37,27 @@ public class FeedDto {
     private Map<String, Integer> roles;
     private Map<String, Integer> recruitmentRoles;
 
-    public static FeedDto toFeedDto(ItemEntity itemEntity){
+    public static FeedDto toFeedDto(FeedEntity feedEntity){
         return new FeedDto(
-                KeyConverter.toStringId(itemEntity.getPk()),
-                KeyConverter.toStringId(itemEntity.getSk()),
-                itemEntity.getEntityType().getType(),
-                KeyConverter.toStringId(itemEntity.getCreatorId()),
-                itemEntity.getNickname(),
-                itemEntity.getTitle(),
-                itemEntity.getRecruitmentNum(),
-                itemEntity.getDeadline(),
-                itemEntity.getPlace(),
-                itemEntity.getPeriod(),
-                itemEntity.getTags(),
-                itemEntity.getLikesCount(),
-                itemEntity.getContent(),
-                itemEntity.getComments(),
-                itemEntity.getPostStatus(),
-                itemEntity.getTimestamp(),
-                itemEntity.getSavedFeed(),
-                itemEntity.getRoles(),
-                itemEntity.getRecruitmentRoles()
-
+                KeyConverter.toStringId(feedEntity.getPk()),
+                KeyConverter.toStringId(feedEntity.getSk()),
+                feedEntity.getNickname(),
+                feedEntity.getEntityType().getType(),
+                KeyConverter.toStringId(feedEntity.getCreatorId()),
+                feedEntity.getTitle(),
+                feedEntity.getRecruitmentNum(),
+                feedEntity.getDeadline(),
+                feedEntity.getPlace(),
+                feedEntity.getPeriod(),
+                feedEntity.getTags(),
+                feedEntity.getLikesCount(),
+                feedEntity.getContent(),
+                feedEntity.getComments(),
+                feedEntity.getPostStatus(),
+                feedEntity.getTimestamp(),
+                feedEntity.getSavedFeed(),
+                feedEntity.getRoles(),
+                feedEntity.getRecruitmentRoles()
         );
     }
 
