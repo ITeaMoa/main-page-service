@@ -10,4 +10,5 @@ spec:
     - protocol: TCP
       port: 80             # Public-facing port/Service port
       targetPort: 8080       # Container port
+      nodePort: 30080
   type: NodePort            # Exposes the service
