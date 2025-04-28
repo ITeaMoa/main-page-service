@@ -24,4 +24,27 @@
 #             name: mainpage-service
 #             port:
 #               number: 80
-      
+
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  namespace: mainpage-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: nginx 
+  rules:
+    - host: api-iteamoa.brynnpark.cloud
+      http:
+        paths:
+        - path: /main
+          pathType: Prefix
+          backend:
+            service:
+              name: mainpage-service
+              port:
+                number: 80
