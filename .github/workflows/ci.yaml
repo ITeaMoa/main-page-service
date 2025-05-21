@@ -24,7 +24,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build JAR file
-        run: ./gradlew clean build
+        run: ./gradlew clean build  # 
 
       - name: Build Docker image
         run: |
