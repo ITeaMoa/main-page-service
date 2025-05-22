@@ -6,6 +6,7 @@ metadata:
   labels:
     svc: mainpage
 spec:
+  revisionHistoryLimit: 1  # Keep the last one revision
   replicas: 1  # Two pods running the service
   selector:
     matchLabels:
