@@ -20,6 +20,6 @@ spec:
         - name: ecr-secret
       containers:
         - name: main-service
-          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/message:2e80281 # Use ECR
+          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:3715f93 # Use ECR
           ports:
             - containerPort: 8080 # Check container's exposed port 
