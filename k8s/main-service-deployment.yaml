@@ -2,12 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mainpage-deployment
-  namespace: mainpage-namespace 
+  namespace: mainpage-namespace
   labels:
     svc: mainpage
 spec:
-  revisionHistoryLimit: 1  # Keep the last one revision
-  replicas: 1  # Two pods running the service
+  revisionHistoryLimit: 1 # Keep the last one revision
+  replicas: 1 # Two pods running the service
   selector:
     matchLabels:
       svc: mainpage
@@ -16,10 +16,10 @@ spec:
       labels:
         svc: mainpage
     spec:
-      imagePullSecrets: 
+      imagePullSecrets:
         - name: ecr-secret
       containers:
-       - name: main-service
-         image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:latest # Use ECR
-         ports:
-          - containerPort: 8080  # Check container's exposed port 
+        - name: main-service
+          image: 970547342771.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/message:2e80281 # Use ECR
+          ports:
+            - containerPort: 8080 # Check container's exposed port 
