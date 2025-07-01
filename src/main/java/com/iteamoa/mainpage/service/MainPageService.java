@@ -9,6 +9,7 @@ import com.iteamoa.mainpage.entity.LikeEntity;
 import com.iteamoa.mainpage.repository.ApplicationRepository;
 import com.iteamoa.mainpage.repository.FeedRepository;
 import com.iteamoa.mainpage.repository.LikeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class MainPageService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveLike(LikeDto likeDto) throws Exception {
         Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
@@ -77,6 +79,7 @@ public class MainPageService {
         feedRepository.updateFeed(feedEntity);
     }
 
+    @Transactional
     public void deleteLike(LikeDto likeDto) throws Exception {
         Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
@@ -92,6 +95,7 @@ public class MainPageService {
         feedRepository.updateFeed(feedEntity);
     }
 
+    @Transactional
     public void saveApplication(ApplicationDto applicationDto) throws Exception {
         Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
@@ -103,6 +107,7 @@ public class MainPageService {
         feedRepository.updateFeed(feedEntity);
     }
 
+    @Transactional
     public void deleteApplication(ApplicationDto applicationDto) throws Exception {
         Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
