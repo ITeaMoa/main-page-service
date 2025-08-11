@@ -1,53 +1,58 @@
-name: CI - mainpage service
+name: CI - mainpage service (Ncloud)
 
 on:
   push:
-    branches:
-      - main  # Trigger workflow on push to the main branch
+    branches: [ main ]
 
 permissions:
   contents: write
+
+env:
+  REGISTRY: iteamoa-login.kr.ncr.ntruss.com   # NCR registry host
+  IMAGE: mainpage                              # repo/image name in NCR
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2 
-      
+      # Build your app (Spring Boot JAR here; keep if you need it)
+      - name: Build JAR
+        run: ./gradlew clean build
+
       - name: Set short SHA
+        id: meta
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
-        
-      - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build JAR file
-        run: ./gradlew clean build  
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
+      - name: Login to Ncloud Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.NCLOUD_ACCESS_KEY }}     # add to repo secrets
+          password: ${{ secrets.NCLOUD_SECRET_KEY }}     # add to repo secrets
+
+      # Build & push as linux/amd64 so it always matches your NKS nodes
+      - name: Build and Push (linux/amd64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.SHORT_SHA }}
+
+      # Update your k8s manifest with the new image tag
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.3
+
+      - name: Update image in deployment manifest
         run: |
-          docker build \
-            --build-arg AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
-            --build-arg AWS_TABLE=${{ secrets.AWS_TABLE }} \
-            --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:${SHORT_SHA} .
-      
-      - name: Push Docker image to ECR
-        run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:${SHORT_SHA}
-        
-      - name: Update deployment.yaml with new image tag
-        run: |
-          yq e -i '.spec.template.spec.containers[0].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:'"${SHORT_SHA}"'"' k8s/main-service-deployment.yaml
+          yq -i '.spec.template.spec.containers[0].image = "'"${REGISTRY}/${IMAGE}:${SHORT_SHA}"'"' k8s/main-service-deployment.yaml
 
       - name: Commit and push updated deployment
         run: |
@@ -56,3 +61,65 @@ jobs:
           git add k8s/main-service-deployment.yaml
           git commit -m "Update mainpage image to ${SHORT_SHA}" || echo "No changes to commit"
           git push
+
+
+
+
+# name: CI - mainpage service
+
+# on:
+#   push:
+#     branches:
+#       - main  # Trigger workflow on push to the main branch
+
+# permissions:
+#   contents: write
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Set up AWS CLI
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ap-northeast-2 
+      
+#       - name: Set short SHA
+#         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        
+#       - name: Log in to Amazon ECR
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Build JAR file
+#         run: ./gradlew clean build  
+
+#       - name: Build Docker image
+#         run: |
+#           docker build \
+#             --build-arg AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
+#             --build-arg AWS_TABLE=${{ secrets.AWS_TABLE }} \
+#             --build-arg AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }} \
+#             --build-arg AWS_SECRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+#             -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:${SHORT_SHA} .
+      
+#       - name: Push Docker image to ECR
+#         run: |
+#           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:${SHORT_SHA}
+        
+#       - name: Update deployment.yaml with new image tag
+#         run: |
+#           yq e -i '.spec.template.spec.containers[0].image = "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/iteamoa/mainpage:'"${SHORT_SHA}"'"' k8s/main-service-deployment.yaml
+
+#       - name: Commit and push updated deployment
+#         run: |
+#           git config --global user.email "github-actions@github.com"
+#           git config --global user.name "GitHub Actions"
+#           git add k8s/main-service-deployment.yaml
+#           git commit -m "Update mainpage image to ${SHORT_SHA}" || echo "No changes to commit"
+#           git push
