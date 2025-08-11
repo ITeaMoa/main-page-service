@@ -17,14 +17,12 @@ spec:
         svc: mainpage
     spec:
       imagePullSecrets:
-        - name: ncr-regcred          
+        - name: ncr-regcred
       containers:
         - name: main-service
-          image: iteamoa-login.kr.ncr.ntruss.com/mainpage:0.0 # Use ECR
+          image: iteamoa-login.kr.ncr.ntruss.com/mainpage:e86e7fa # Use ECR
           ports:
             - containerPort: 8080 # Check container's exposed port 
-
-
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
