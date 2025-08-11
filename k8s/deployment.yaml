@@ -20,7 +20,7 @@ spec:
         - name: ncr-regcred
       containers:
         - name: main-service
-          image: iteamoa-login.kr.ncr.ntruss.com/mainpage:e86e7fa # Use ECR
+          image: iteamoa.kr.ncr.ntruss.com/mainpage:b3d7abc # Use ECR
           ports:
             - containerPort: 8080 # Check container's exposed port 
 # apiVersion: apps/v1
