@@ -18,31 +18,23 @@ public class Comment {
     private String commentId;
     private String comment;
     private LocalDateTime timestamp;
-    private String name;
+    private String nickname;
 
-    @DynamoDbAttribute("name")
-    public String getName() {
-        return name;
-    }
+    @DynamoDbAttribute("nickname")
+    public String getNickname() {return nickname;}
 
     @DynamoDbAttribute("userId")
-    public String getUserId() {
-        return userId;
-    }
+    public String getUserId() {return userId;}
 
     @DynamoDbAttribute("commentId")
     public String getCommentId() {return commentId;}
 
     @DynamoDbAttribute("comment")
-    public String getComment() {
-        return comment;
-    }
+    public String getComment() {return comment;}
 
     @DynamoDbConvertedBy(LocalDateTimeConverter.class)
     @DynamoDbAttribute("timestamp")
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
+    public LocalDateTime getTimestamp() {return timestamp;}
 
     //localDateTime객체를 다이나모 디비에서 문자열로 저장하고 다시 변환할수있게 하는 클래스
     public static class LocalDateTimeConverter implements AttributeConverter<LocalDateTime> {

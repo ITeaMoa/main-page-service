@@ -9,6 +9,7 @@ import com.iteamoa.mainpage.entity.LikeEntity;
 import com.iteamoa.mainpage.repository.ApplicationRepository;
 import com.iteamoa.mainpage.repository.FeedRepository;
 import com.iteamoa.mainpage.repository.LikeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class MainPageService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveLike(LikeDto likeDto) throws Exception {
         Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
@@ -72,43 +74,49 @@ public class MainPageService {
                 .ifPresent(item -> {
                     throw new RuntimeException("Already liked");
                 });
+        likeRepository.saveLike(new LikeEntity(likeDto));
         feedEntity.setLikesCount(feedEntity.getLikesCount()+1);
         feedRepository.updateFeed(feedEntity);
-        likeRepository.saveLike(new LikeEntity(likeDto));
     }
 
+    @Transactional
     public void deleteLike(LikeDto likeDto) throws Exception {
         Objects.requireNonNull(likeDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(likeDto.getSk(), "Sk cannot be null");
         Objects.requireNonNull(likeDto.getFeedType(), "FeedType cannot be null");
 
         FeedEntity feedEntity = Objects.requireNonNull(feedRepository.getFeed(likeDto.getSk(), likeDto.getFeedType()));
+
         Optional.ofNullable(likeRepository.getLike(new LikeEntity(likeDto)))
-                .orElseThrow(() -> new Exception("No like exists"));
+                .orElseThrow(() -> new RuntimeException("Like does not exist"));
+
+        likeRepository.deleteLike(new LikeEntity(likeDto));
         feedEntity.setLikesCount(feedEntity.getLikesCount()-1);
         feedRepository.updateFeed(feedEntity);
-        likeRepository.saveLike(new LikeEntity(likeDto));
     }
 
+    @Transactional
     public void saveApplication(ApplicationDto applicationDto) throws Exception {
         Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
         Objects.requireNonNull(applicationDto.getPart(), "Part cannot be null");
 
         FeedEntity feedEntity = Objects.requireNonNull(feedRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType()));
+        applicationRepository.saveApplication(new ApplicationEntity(applicationDto));
         feedEntity.getRecruitmentRoles().merge(applicationDto.getPart(), 1, Integer::sum);
         feedRepository.updateFeed(feedEntity);
-        applicationRepository.saveApplication(new ApplicationEntity(applicationDto));
     }
 
+    @Transactional
     public void deleteApplication(ApplicationDto applicationDto) throws Exception {
         Objects.requireNonNull(applicationDto.getPk(), "Pk cannot be null");
         Objects.requireNonNull(applicationDto.getSk(), "Sk cannot be null");
+        Objects.requireNonNull(applicationDto.getPart(), "Part cannot be null");
 
         FeedEntity feedEntity = Objects.requireNonNull(feedRepository.getFeed(applicationDto.getSk(), applicationDto.getFeedType()));
-        ApplicationEntity applicationEntity = applicationRepository.getApplication(new ApplicationEntity(applicationDto));
-        feedEntity.getRecruitmentRoles().merge(applicationEntity.getPart(), -1, Integer::sum);
+        applicationRepository.deleteApplication(new ApplicationEntity(applicationDto));
+        feedEntity.getRecruitmentRoles().merge(applicationDto.getPart(), -1, Integer::sum);
         feedRepository.updateFeed(feedEntity);
-        applicationRepository.deleteApplication(applicationEntity);
+
     }
 }
