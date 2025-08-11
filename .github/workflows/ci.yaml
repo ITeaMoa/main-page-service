@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 env:
-  REGISTRY: iteamoa-login.kr.ncr.ntruss.com   # NCR registry host
+  REGISTRY: iteamoa.kr.ncr.ntruss.com   # NCR registry host
   IMAGE: mainpage                              # repo/image name in NCR
 
 jobs:
