@@ -56,8 +56,8 @@ jobs:
 
       - name: Commit and push updated deployment
         run: |
-          git config --global user.email "pbh7080@gmail.com"
-          git config --global user.name "bohyeonpark"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GithubActions"
           git add k8s/deployment.yaml
           git commit -m "Update mainpage image to ${SHORT_SHA}" || echo "No changes to commit"
           git push
