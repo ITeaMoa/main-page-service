@@ -25,7 +25,7 @@ spec:
         - name: ncr-regcred
       containers:
         - name: main-service
-          image: iteamoa.kr.ncr.ntruss.com/mainpage:b3d7abc # Use ECR
+          image: iteamoa.kr.ncr.ntruss.com/mainpage:b3d7abc # Use ncloud registry, not ECR
           ports:
             - containerPort: 8080 # Check container's exposed port
 
