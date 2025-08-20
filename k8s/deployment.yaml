@@ -7,7 +7,7 @@ metadata:
     svc: mainpage
 spec:
   revisionHistoryLimit: 1 # Keep the last one revision
-  replicas: 1 # Two pods running the service
+  replicas: 1 # One pod running the service
   selector:
     matchLabels:
       svc: mainpage
@@ -15,6 +15,11 @@ spec:
     metadata:
       labels:
         svc: mainpage
+      annotations:       
+        sidecar.istio.io/proxyCPU: "50m"
+        sidecar.istio.io/proxyMemory: "64Mi"
+        sidecar.istio.io/proxyCPULimit: "200m"
+        sidecar.istio.io/proxyMemoryLimit: "128Mi"
     spec:
       imagePullSecrets:
         - name: ncr-regcred
@@ -22,7 +27,9 @@ spec:
         - name: main-service
           image: iteamoa-login.kr.ncr.ntruss.com/mainpage:e86e7fa # Use ECR
           ports:
-            - containerPort: 8080 # Check container's exposed port 
+            - containerPort: 8080 # Check container's exposed port
+
+
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
