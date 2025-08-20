@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         svc: mainpage
-      annotations:       
+      annotations:
         sidecar.istio.io/proxyCPU: "50m"
         sidecar.istio.io/proxyMemory: "64Mi"
         sidecar.istio.io/proxyCPULimit: "200m"
@@ -25,11 +25,9 @@ spec:
         - name: ncr-regcred
       containers:
         - name: main-service
-          image: iteamoa.kr.ncr.ntruss.com/mainpage:b3d7abc # Use ECR
+          image: iteamoa.kr.ncr.ntruss.com/mainpage:51e10bc # Use ECR
           ports:
             - containerPort: 8080 # Check container's exposed port
-
-
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
